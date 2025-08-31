@@ -1,0 +1,16 @@
+{
+  "routes": [
+    {
+      "name": "Home",
+      "dest": "/"
+    },
+    {
+      "name": "Snippets",
+      "dest": "/snippets"
+    },
+    {
+      "name": "Editor",
+      "dest": "/editor"
+    }
+  ]
+}
