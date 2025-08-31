@@ -7,10 +7,12 @@ import { errorHandler } from './middleware';
 
 // Routers
 import { snippetRouter } from './routes/snippets';
+import aiRouter from './routes/ai';
 import { associateModels } from './db/associateModels';
 
 // Env config
 dotenv.config({ path: './src/config/.env' });
+dotenv.config(); // Also load from root .env
 
 const app = express();
 const logger = new Logger('server');
@@ -27,6 +29,7 @@ app.get(/^\/(?!api)/, (req: Request, res: Response) => {
 
 // Routes
 app.use('/api/snippets', snippetRouter);
+app.use('/api/ai', aiRouter);
 
 // Error handler
 app.use(errorHandler);

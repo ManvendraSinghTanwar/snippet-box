@@ -9,6 +9,8 @@ import {
 import { SnippetsContext } from '../../store';
 import { NewSnippet } from '../../typescript/interfaces';
 import { Button, Card } from '../UI';
+import AutoTagger from '../AI/AutoTagger';
+import AIExplainer from '../AI/AIExplainer';
 
 interface Props {
   inEdit?: boolean;
@@ -28,6 +30,8 @@ export const SnippetForm = (props: Props): JSX.Element => {
     isPinned: false,
     tags: []
   });
+
+  const [useAI, setUseAI] = useState<boolean>(false);
 
   useEffect(() => {
     if (inEdit) {
@@ -61,12 +65,17 @@ export const SnippetForm = (props: Props): JSX.Element => {
   const formHandler = (e: FormEvent) => {
     e.preventDefault();
 
+    const submissionData = {
+      ...formData,
+      useAI
+    };
+
     if (inEdit) {
       if (currentSnippet) {
-        updateSnippet(formData, currentSnippet.id);
+        updateSnippet(submissionData, currentSnippet.id);
       }
     } else {
-      createSnippet(formData);
+      createSnippet(submissionData);
     }
   };
 
@@ -77,6 +86,25 @@ export const SnippetForm = (props: Props): JSX.Element => {
           <form onSubmit={e => formHandler(e)}>
             {/* DETAILS SECTION */}
             <h5 className='card-title mb-3'>Snippet details</h5>
+
+            {/* AI FEATURES TOGGLE */}
+            <div className='mb-3'>
+              <div className='form-check'>
+                <input
+                  className='form-check-input'
+                  type='checkbox'
+                  id='useAI'
+                  checked={useAI}
+                  onChange={(e) => setUseAI(e.target.checked)}
+                />
+                <label className='form-check-label' htmlFor='useAI'>
+                  🤖 Enable AI Features (Auto-tagging & Code explanation)
+                </label>
+              </div>
+              <div className='form-text'>
+                AI features require an OpenAI API key to be configured
+              </div>
+            </div>
 
             {/* TITLE */}
             <div className='mb-3'>
@@ -147,6 +175,19 @@ export const SnippetForm = (props: Props): JSX.Element => {
                 added automatically
               </div>
             </div>
+
+            {/* AI AUTO-TAGGER */}
+            {formData.code && formData.language && (
+              <div className='mb-3'>
+                <AutoTagger
+                  code={formData.code}
+                  language={formData.language}
+                  currentTags={formData.tags}
+                  onTagsGenerated={(newTags) => setFormData({...formData, tags: newTags})}
+                />
+              </div>
+            )}
+
             <hr />
 
             {/* CODE SECTION */}
@@ -163,6 +204,17 @@ export const SnippetForm = (props: Props): JSX.Element => {
                 onChange={e => inputHandler(e)}
               ></textarea>
             </div>
+
+            {/* AI EXPLAINER */}
+            {formData.code && formData.language && (
+              <div className='mb-3'>
+                <AIExplainer
+                  code={formData.code}
+                  language={formData.language}
+                />
+              </div>
+            )}
+
             <hr />
 
             {/* DOCS SECTION */}

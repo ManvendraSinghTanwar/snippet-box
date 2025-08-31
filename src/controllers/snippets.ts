@@ -3,7 +3,7 @@ import { QueryTypes, Op } from 'sequelize';
 import { sequelize } from '../db';
 import { asyncWrapper } from '../middleware';
 import { SnippetModel, Snippet_TagModel, TagModel } from '../models';
-import { ErrorResponse, tagParser, Logger, createTags } from '../utils';
+import { ErrorResponse, tagParser, Logger, createTags, AIService } from '../utils';
 import { Body, SearchQuery } from '../typescript/interfaces';
 
 /**
@@ -14,15 +14,36 @@ import { Body, SearchQuery } from '../typescript/interfaces';
 export const createSnippet = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     // Get tags from request body
-    const { language, tags: requestTags } = <Body>req.body;
-    const parsedRequestTags = tagParser([
-      ...requestTags,
-      language.toLowerCase()
-    ]);
+    const { language, tags: requestTags, code, useAI } = <Body & { useAI?: boolean }>req.body;
+    
+    let aiAnalysis = null;
+    let finalTags = [...requestTags, language.toLowerCase()];
+    let aiExplanation = '';
+    let complexity = 'beginner';
 
-    // Create snippet
+    // Use AI analysis if requested and API key is available
+    if (useAI && process.env.OPENAI_API_KEY) {
+      try {
+        const aiService = new AIService();
+        aiAnalysis = await aiService.analyzeCode(code, language);
+        
+        // Merge AI suggested tags with user tags
+        finalTags = [...new Set([...finalTags, ...aiAnalysis.suggestedTags])];
+        aiExplanation = aiAnalysis.explanation;
+        complexity = aiAnalysis.complexity;
+      } catch (error) {
+        // Continue without AI if it fails
+        console.warn('AI analysis failed, continuing without it');
+      }
+    }
+
+    const parsedRequestTags = tagParser(finalTags);
+
+    // Create snippet with AI data
     const snippet = await SnippetModel.create({
       ...req.body,
+      aiExplanation,
+      complexity,
       tags: [...parsedRequestTags].join(',')
     });
 
