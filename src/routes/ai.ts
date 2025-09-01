@@ -222,4 +222,67 @@ router.post('/security-scan', asyncWrapper(async (req, res) => {
   }
 }));
 
+// Code conversion endpoint
+router.post('/convert-code', asyncWrapper(async (req, res) => {
+  const { code, sourceLanguage, targetLanguage } = req.body;
+
+  if (!code || !sourceLanguage || !targetLanguage) {
+    res.status(400).json({
+      error: 'Code, source language, and target language are required'
+    });
+    return;
+  }
+
+  if (sourceLanguage === targetLanguage) {
+    res.status(400).json({
+      error: 'Source and target languages cannot be the same'
+    });
+    return;
+  }
+
+  try {
+    const aiService = getAIService();
+    const conversion = await aiService.convertCode(code, sourceLanguage, targetLanguage);
+
+    res.json({
+      ...conversion,
+      success: true
+    });
+  } catch (error: any) {
+    res.status(503).json({
+      error: error.message || 'AI service temporarily unavailable',
+      success: false
+    });
+  }
+}));
+
+// Language feature comparison endpoint
+router.post('/compare-languages', asyncWrapper(async (req, res) => {
+  const { sourceLanguage, targetLanguage } = req.body;
+
+  if (!sourceLanguage || !targetLanguage) {
+    res.status(400).json({
+      error: 'Source and target languages are required'
+    });
+    return;
+  }
+
+  try {
+    const aiService = getAIService();
+    const comparison = await aiService.getLanguageFeatureComparison(sourceLanguage, targetLanguage);
+
+    res.json({
+      comparison,
+      sourceLanguage,
+      targetLanguage,
+      success: true
+    });
+  } catch (error: any) {
+    res.status(503).json({
+      error: error.message || 'AI service temporarily unavailable',
+      success: false
+    });
+  }
+}));
+
 export default router;

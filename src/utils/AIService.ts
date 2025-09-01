@@ -34,6 +34,23 @@ interface CodeOptimizationResult {
   maintainability: 'poor' | 'fair' | 'good' | 'excellent';
 }
 
+interface CodeConversionResult {
+  convertedCode: string;
+  sourceLanguage: string;
+  targetLanguage: string;
+  conversionNotes: string[];
+  confidence: 'high' | 'medium' | 'low';
+  warnings: string[];
+  equivalentLibraries?: { [key: string]: string };
+}
+
+interface LanguageFeatureComparison {
+  feature: string;
+  sourceImplementation: string;
+  targetImplementation: string;
+  notes: string;
+}
+
 export class AIService {
   private openai: OpenAI;
   private logger: Logger;
@@ -49,6 +66,37 @@ export class AIService {
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
+  }
+
+  private parseJSONResponse(content: string): any {
+    try {
+      // First try to parse as-is
+      return JSON.parse(content);
+    } catch (error) {
+      try {
+        // Try to extract JSON from markdown code blocks
+        const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+        if (jsonMatch && jsonMatch[1]) {
+          return JSON.parse(jsonMatch[1]);
+        }
+        
+        // Try to find JSON object/array in the content
+        const jsonObjectMatch = content.match(/\{[\s\S]*\}/);
+        if (jsonObjectMatch) {
+          return JSON.parse(jsonObjectMatch[0]);
+        }
+        
+        const jsonArrayMatch = content.match(/\[[\s\S]*\]/);
+        if (jsonArrayMatch) {
+          return JSON.parse(jsonArrayMatch[0]);
+        }
+        
+        throw new Error('No valid JSON found in response');
+      } catch (parseError) {
+        this.logger.log(`Error parsing JSON response: ${parseError}. Content: ${content.substring(0, 200)}...`, 'ERROR');
+        throw new Error('Invalid JSON response from AI service');
+      }
+    }
   }
 
   async generateSnippetDetails(code: string): Promise<SnippetDetailsResult> {
@@ -97,7 +145,7 @@ Respond in JSON format:
       }
 
       // Parse JSON response
-      const details = JSON.parse(content);
+      const details = this.parseJSONResponse(content);
       
       return {
         title: details.title || 'Code Snippet',
@@ -189,7 +237,7 @@ Respond in JSON format:
       }
 
       // Parse JSON response
-      const analysis = JSON.parse(content);
+      const analysis = this.parseJSONResponse(content);
       
       return {
         explanation: analysis.explanation || 'No explanation available',
@@ -331,7 +379,7 @@ Respond with a detailed JSON analysis:
         throw new Error('No response from OpenAI');
       }
 
-      const optimization = JSON.parse(content);
+      const optimization = this.parseJSONResponse(content);
       
       return {
         overallScore: optimization.overallScore || 75,
@@ -441,11 +489,141 @@ Respond with JSON array of security issues:
         return [];
       }
 
-      const securityIssues = JSON.parse(content);
+      const securityIssues = this.parseJSONResponse(content);
       return Array.isArray(securityIssues) ? securityIssues : [];
 
     } catch (error) {
       this.logger.log('Error analyzing security: ' + error, 'ERROR');
+      return [];
+    }
+  }
+
+  async convertCode(code: string, sourceLanguage: string, targetLanguage: string): Promise<CodeConversionResult> {
+    try {
+      const prompt = `Convert this ${sourceLanguage} code to ${targetLanguage}. Provide a comprehensive analysis of the conversion.
+
+Source Code (${sourceLanguage}):
+\`\`\`${sourceLanguage}
+${code}
+\`\`\`
+
+Requirements:
+1. Convert the code to idiomatic ${targetLanguage}
+2. Maintain the same functionality
+3. Use appropriate ${targetLanguage} conventions and best practices
+4. Identify any features that don't have direct equivalents
+5. Suggest equivalent libraries if needed
+6. Provide conversion confidence level
+
+Respond with JSON:
+{
+  "convertedCode": "converted code here",
+  "sourceLanguage": "${sourceLanguage}",
+  "targetLanguage": "${targetLanguage}",
+  "conversionNotes": ["note1", "note2"],
+  "confidence": "high|medium|low",
+  "warnings": ["warning1", "warning2"],
+  "equivalentLibraries": {"sourceLib": "targetLib"}
+}`;
+
+      const response = await this.openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: `You are an expert polyglot programmer specializing in code conversion between programming languages. You understand the nuances, idioms, and best practices of multiple programming languages. Always provide accurate, idiomatic conversions while noting important differences and potential issues.`
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        max_tokens: 1500,
+        temperature: 0.2,
+      });
+
+      const content = response.choices[0]?.message?.content;
+      if (!content) {
+        throw new Error('No response from OpenAI');
+      }
+
+      const conversion = this.parseJSONResponse(content);
+      
+      return {
+        convertedCode: conversion.convertedCode || 'Conversion failed',
+        sourceLanguage: conversion.sourceLanguage || sourceLanguage,
+        targetLanguage: conversion.targetLanguage || targetLanguage,
+        conversionNotes: conversion.conversionNotes || [],
+        confidence: conversion.confidence || 'low',
+        warnings: conversion.warnings || [],
+        equivalentLibraries: conversion.equivalentLibraries || {}
+      };
+
+    } catch (error) {
+      this.logger.log('Error converting code: ' + error, 'ERROR');
+      
+      // Fallback response
+      return {
+        convertedCode: 'Code conversion temporarily unavailable',
+        sourceLanguage,
+        targetLanguage,
+        conversionNotes: ['AI conversion service temporarily unavailable'],
+        confidence: 'low',
+        warnings: ['Automatic conversion failed'],
+        equivalentLibraries: {}
+      };
+    }
+  }
+
+  async getLanguageFeatureComparison(sourceLanguage: string, targetLanguage: string): Promise<LanguageFeatureComparison[]> {
+    try {
+      const prompt = `Compare key programming features between ${sourceLanguage} and ${targetLanguage}. Focus on:
+
+1. Syntax differences
+2. Data structures
+3. Object-oriented concepts
+4. Error handling
+5. Memory management
+6. Concurrency/async patterns
+7. Package/module systems
+8. Common libraries
+
+Respond with JSON array:
+[
+  {
+    "feature": "Feature name",
+    "sourceImplementation": "How it works in ${sourceLanguage}",
+    "targetImplementation": "How it works in ${targetLanguage}",
+    "notes": "Key differences and considerations"
+  }
+]`;
+
+      const response = await this.openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: "You are a programming language expert who provides detailed comparisons between different programming languages, focusing on practical differences developers need to know."
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        max_tokens: 1200,
+        temperature: 0.3,
+      });
+
+      const content = response.choices[0]?.message?.content;
+      if (!content) {
+        return [];
+      }
+
+      const comparison = this.parseJSONResponse(content);
+      return Array.isArray(comparison) ? comparison : [];
+
+    } catch (error) {
+      this.logger.log('Error getting language comparison: ' + error, 'ERROR');
       return [];
     }
   }
