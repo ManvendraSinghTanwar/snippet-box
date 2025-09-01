@@ -1,0 +1,13 @@
+{
+  "name": "snippet-hub",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npm run build:client && npm run build:tsc",
+    "start": "node build/server.js",
+    "railway:build": "npm install && npm run build:client && npm run build:tsc",
+    "railway:start": "node build/server.js"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}

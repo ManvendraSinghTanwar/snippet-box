@@ -1,7 +1,8 @@
 import { Fragment, useEffect, useContext, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { SnippetForm } from '../components/Snippets/SnippetForm';
-import { Layout, PageHeader } from '../components/UI';
+import { SmartSnippetForm } from '../components/Snippets/SmartSnippetForm';
+import { Layout, PageHeader, Button } from '../components/UI';
 import { SnippetsContext } from '../store';
 
 interface Params {
@@ -11,6 +12,7 @@ interface Params {
 export const Editor = (): JSX.Element => {
   const { setSnippet: setCurrentSnippet } = useContext(SnippetsContext);
   const [inEdit, setInEdit] = useState(false);
+  const [useSmartMode, setUseSmartMode] = useState(true); // Default to smart mode
 
   // Get previous location
   const location = useLocation<{ from: string }>();
@@ -24,8 +26,13 @@ export const Editor = (): JSX.Element => {
     if (id) {
       setCurrentSnippet(+id);
       setInEdit(true);
+      setUseSmartMode(false); // Use traditional form for editing
     }
   }, []);
+
+  const toggleMode = () => {
+    setUseSmartMode(!useSmartMode);
+  };
 
   return (
     <Layout>
@@ -40,8 +47,20 @@ export const Editor = (): JSX.Element => {
         </Fragment>
       ) : (
         <Fragment>
-          <PageHeader title='Add new snippet' />
-          <SnippetForm />
+          <PageHeader title='Add new snippet'>
+            <div className="d-flex gap-2 mt-2">
+              <Button
+                text={useSmartMode ? '🤖 Smart Mode' : '📝 Manual Mode'}
+                color={useSmartMode ? 'primary' : 'secondary'}
+                outline={!useSmartMode}
+                handler={toggleMode}
+              />
+              <span className="badge bg-info align-self-center">
+                {useSmartMode ? 'AI-Powered' : 'Traditional'}
+              </span>
+            </div>
+          </PageHeader>
+          {useSmartMode ? <SmartSnippetForm /> : <SnippetForm />}
         </Fragment>
       )}
     </Layout>

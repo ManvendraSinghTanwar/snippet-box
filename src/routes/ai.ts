@@ -1,8 +1,24 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import { AIService } from '../utils';
 import { asyncWrapper } from '../middleware';
 
 const router = express.Router();
+
+// Rate limiting for AI endpoints
+const aiRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // Limit each IP to 20 requests per windowMs
+  message: {
+    error: 'Too many AI requests from this IP, please try again later.',
+    success: false
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Apply rate limiting to all AI routes
+router.use(aiRateLimit);
 
 // Helper function to get AI service with error handling
 const getAIService = () => {
@@ -83,6 +99,33 @@ router.post('/analyze', asyncWrapper(async (req, res) => {
 
     res.json({
       ...analysis,
+      success: true
+    });
+  } catch (error: any) {
+    res.status(503).json({
+      error: error.message || 'AI service temporarily unavailable',
+      success: false
+    });
+  }
+}));
+
+// Generate complete snippet details from code
+router.post('/generate-snippet', asyncWrapper(async (req, res) => {
+  const { code } = req.body;
+
+  if (!code) {
+    res.status(400).json({
+      error: 'Code is required'
+    });
+    return;
+  }
+
+  try {
+    const aiService = getAIService();
+    const snippetDetails = await aiService.generateSnippetDetails(code);
+
+    res.json({
+      ...snippetDetails,
       success: true
     });
   } catch (error: any) {

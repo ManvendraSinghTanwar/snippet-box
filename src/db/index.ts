@@ -6,11 +6,24 @@ import { Logger } from '../utils';
 const logger = new Logger('db');
 
 // DB config
-export const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: 'data/db.sqlite3',
-  logging: false
-});
+const isDev = process.env.NODE_ENV === 'development';
+const databaseUrl = process.env.DATABASE_URL;
+
+export const sequelize = databaseUrl 
+  ? new Sequelize(databaseUrl, {
+      logging: false,
+      dialectOptions: {
+        ssl: process.env.NODE_ENV === 'production' ? {
+          require: true,
+          rejectUnauthorized: false
+        } : false
+      }
+    })
+  : new Sequelize({
+      dialect: 'sqlite',
+      storage: 'data/db.sqlite3',
+      logging: false
+    });
 
 // Migrations config
 const umzug = new Umzug({

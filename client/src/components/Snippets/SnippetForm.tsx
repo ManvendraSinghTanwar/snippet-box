@@ -87,25 +87,6 @@ export const SnippetForm = (props: Props): JSX.Element => {
             {/* DETAILS SECTION */}
             <h5 className='card-title mb-3'>Snippet details</h5>
 
-            {/* AI FEATURES TOGGLE */}
-            <div className='mb-3'>
-              <div className='form-check'>
-                <input
-                  className='form-check-input'
-                  type='checkbox'
-                  id='useAI'
-                  checked={useAI}
-                  onChange={(e) => setUseAI(e.target.checked)}
-                />
-                <label className='form-check-label' htmlFor='useAI'>
-                  🤖 Enable AI Features (Auto-tagging & Code explanation)
-                </label>
-              </div>
-              <div className='form-text'>
-                AI features require an OpenAI API key to be configured
-              </div>
-            </div>
-
             {/* TITLE */}
             <div className='mb-3'>
               <label htmlFor='title' className='form-label'>
@@ -176,20 +157,6 @@ export const SnippetForm = (props: Props): JSX.Element => {
               </div>
             </div>
 
-            {/* AI AUTO-TAGGER */}
-            {formData.code && formData.language && (
-              <div className='mb-3'>
-                <AutoTagger
-                  code={formData.code}
-                  language={formData.language}
-                  currentTags={formData.tags}
-                  onTagsGenerated={(newTags) => setFormData({...formData, tags: newTags})}
-                />
-              </div>
-            )}
-
-            <hr />
-
             {/* CODE SECTION */}
             <h5 className='card-title mb-3'>Snippet code</h5>
             <div className='mb-3'>
@@ -205,8 +172,41 @@ export const SnippetForm = (props: Props): JSX.Element => {
               ></textarea>
             </div>
 
+            {/* AI FEATURES TOGGLE */}
+            <div className='mb-3'>
+              <div className='form-check'>
+                <input
+                  className='form-check-input'
+                  type='checkbox'
+                  id='useAI'
+                  checked={useAI}
+                  onChange={(e) => setUseAI(e.target.checked)}
+                />
+                <label className='form-check-label' htmlFor='useAI'>
+                  🤖 Enable AI Features (Auto-tagging & Code explanation)
+                </label>
+              </div>
+              <div className='form-text'>
+                AI features require an OpenAI API key to be configured
+              </div>
+            </div>
+
+            {/* AI AUTO-TAGGER */}
+            {useAI && formData.code && formData.language && (
+              <div className='mb-3'>
+                <AutoTagger
+                  code={formData.code}
+                  language={formData.language}
+                  currentTags={formData.tags}
+                  onTagsGenerated={(newTags) => setFormData({...formData, tags: newTags})}
+                />
+              </div>
+            )}
+
+            <hr />
+
             {/* AI EXPLAINER */}
-            {formData.code && formData.language && (
+            {useAI && formData.code && formData.language && (
               <div className='mb-3'>
                 <AIExplainer
                   code={formData.code}

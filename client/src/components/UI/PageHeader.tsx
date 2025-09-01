@@ -4,10 +4,11 @@ interface Props<T> {
   title: string;
   prevDest?: string;
   prevState?: T;
+  children?: React.ReactNode;
 }
 
 export const PageHeader = <T,>(props: Props<T>): JSX.Element => {
-  const { title, prevDest, prevState } = props;
+  const { title, prevDest, prevState, children } = props;
 
   return (
     <div className='col-12'>
@@ -25,6 +26,7 @@ export const PageHeader = <T,>(props: Props<T>): JSX.Element => {
           </Link>
         </h6>
       )}
+      {children}
     </div>
   );
 };
