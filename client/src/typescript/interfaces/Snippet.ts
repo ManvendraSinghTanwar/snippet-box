@@ -7,6 +7,7 @@ export interface NewSnippet {
   code: string;
   docs?: string;
   isPinned: boolean;
+  collectionId?: number;
   tags: string[];
   aiExplanation?: string;
   aiComplexity?: 'beginner' | 'intermediate' | 'advanced';

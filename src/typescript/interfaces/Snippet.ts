@@ -8,6 +8,10 @@ export interface Snippet extends Model {
   code: string;
   docs: string;
   isPinned: number;
+  collectionId?: number;
+  aiExplanation?: string;
+  aiComplexity?: 'beginner' | 'intermediate' | 'advanced';
+  aiSuggestedTags?: string[];
   tags?: { name: string }[];
 }
 

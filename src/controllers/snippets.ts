@@ -70,14 +70,21 @@ export const createSnippet = asyncWrapper(
 export const getAllSnippets = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const snippets = await SnippetModel.findAll({
-      include: {
-        model: TagModel,
-        as: 'tags',
-        attributes: ['name'],
-        through: {
-          attributes: []
+      include: [
+        {
+          model: TagModel,
+          as: 'tags',
+          attributes: ['name'],
+          through: {
+            attributes: []
+          }
+        },
+        {
+          model: require('../models').CollectionModel,
+          as: 'collection',
+          attributes: ['id', 'name', 'color', 'icon']
         }
-      }
+      ]
     });
 
     const populatedSnippets = snippets.map(snippet => {
@@ -85,7 +92,7 @@ export const getAllSnippets = asyncWrapper(
 
       return {
         ...rawSnippet,
-        tags: rawSnippet.tags?.map(tag => tag.name)
+        tags: rawSnippet.tags?.map((tag: any) => tag.name)
       };
     });
 
@@ -104,14 +111,21 @@ export const getSnippet = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const snippet = await SnippetModel.findOne({
       where: { id: req.params.id },
-      include: {
-        model: TagModel,
-        as: 'tags',
-        attributes: ['name'],
-        through: {
-          attributes: []
+      include: [
+        {
+          model: TagModel,
+          as: 'tags',
+          attributes: ['name'],
+          through: {
+            attributes: []
+          }
+        },
+        {
+          model: require('../models').CollectionModel,
+          as: 'collection',
+          attributes: ['id', 'name', 'color', 'icon']
         }
-      }
+      ]
     });
 
     if (!snippet) {
@@ -126,7 +140,7 @@ export const getSnippet = asyncWrapper(
     const rawSnippet = snippet.get({ plain: true });
     const populatedSnippet = {
       ...rawSnippet,
-      tags: rawSnippet.tags?.map(tag => tag.name)
+      tags: rawSnippet.tags?.map((tag: any) => tag.name)
     };
 
     res.status(200).json({
@@ -155,7 +169,23 @@ export const updateSnippet = asyncWrapper(
       );
     }
 
-    // Get tags from request body
+    // Check if this is a partial update (only collectionId)
+    const isPartialUpdate = Object.keys(req.body).length === 1 && 'collectionId' in req.body;
+
+    if (isPartialUpdate) {
+      // Just update the collectionId
+      snippet = await snippet.update({
+        collectionId: req.body.collectionId
+      });
+
+      res.status(200).json({
+        success: true,
+        data: snippet
+      });
+      return;
+    }
+
+    // Full update - handle tags as before
     const { language, tags: requestTags } = <Body>req.body;
     let parsedRequestTags = tagParser([...requestTags, language.toLowerCase()]);
 
@@ -173,6 +203,7 @@ export const updateSnippet = asyncWrapper(
     const rawSnippet = snippet.get({ plain: true });
 
     res.status(200).json({
+      success: true,
       data: {
         ...rawSnippet,
         tags: [...parsedRequestTags]

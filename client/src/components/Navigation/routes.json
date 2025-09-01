@@ -9,6 +9,10 @@
       "dest": "/snippets"
     },
     {
+      "name": "Collections",
+      "dest": "/collections"
+    },
+    {
       "name": "Editor",
       "dest": "/editor"
     },

@@ -6,15 +6,16 @@ import { Badge, Button, Card } from '../UI';
 import { SnippetsContext } from '../../store';
 import copy from 'clipboard-copy';
 import { SnippetPin } from './SnippetPin';
+import MoveToCollection from './MoveToCollection';
 
 interface Props {
   snippet: Snippet;
 }
 
 export const SnippetCard = (props: Props): JSX.Element => {
-  const { title, description, language, code, id, createdAt, isPinned } =
+  const { title, description, language, code, id, createdAt, isPinned, collectionId } =
     props.snippet;
-  const { setSnippet } = useContext(SnippetsContext);
+  const { setSnippet, getSnippets } = useContext(SnippetsContext);
 
   const copyHandler = () => {
     copy(code);
@@ -42,30 +43,41 @@ export const SnippetCard = (props: Props): JSX.Element => {
         <hr />
 
         {/* ACTIONS */}
-        <div className='d-flex justify-content-end'>
-          <Link
-            to={{
-              pathname: `/snippet/${id}`,
-              state: { from: window.location.pathname }
-            }}
-          >
+        <div className='d-flex justify-content-between align-items-center'>
+          <div>
+            <MoveToCollection
+              snippetIds={[id]}
+              currentCollectionId={collectionId}
+              onSuccess={() => getSnippets()}
+              buttonText="📁"
+              buttonSize={true}
+            />
+          </div>
+          <div>
+            <Link
+              to={{
+                pathname: `/snippet/${id}`,
+                state: { from: window.location.pathname }
+              }}
+            >
+              <Button
+                text='View'
+                color='secondary'
+                small
+                outline
+                classes='me-2'
+                handler={() => {
+                  setSnippet(id);
+                }}
+              />
+            </Link>
             <Button
-              text='View'
+              text='Copy code'
               color='secondary'
               small
-              outline
-              classes='me-2'
-              handler={() => {
-                setSnippet(id);
-              }}
+              handler={copyHandler}
             />
-          </Link>
-          <Button
-            text='Copy code'
-            color='secondary'
-            small
-            handler={copyHandler}
-          />
+          </div>
         </div>
       </div>
     </Card>

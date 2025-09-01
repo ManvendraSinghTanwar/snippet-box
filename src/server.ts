@@ -8,6 +8,7 @@ import { errorHandler } from './middleware';
 // Routers
 import { snippetRouter } from './routes/snippets';
 import aiRouter from './routes/ai';
+import collectionsRouter from './routes/collections';
 import { associateModels } from './db/associateModels';
 
 // Env config
@@ -30,6 +31,7 @@ app.get(/^\/(?!api)/, (req: Request, res: Response) => {
 // Routes
 app.use('/api/snippets', snippetRouter);
 app.use('/api/ai', aiRouter);
+app.use('/api/collections', collectionsRouter);
 
 // Error handler
 app.use(errorHandler);

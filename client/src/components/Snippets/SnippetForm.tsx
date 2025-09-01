@@ -7,7 +7,7 @@ import {
   useEffect
 } from 'react';
 import { SnippetsContext } from '../../store';
-import { NewSnippet } from '../../typescript/interfaces';
+import { NewSnippet, Collection } from '../../typescript/interfaces';
 import { Button, Card } from '../UI';
 import AutoTagger from '../AI/AutoTagger';
 import AIExplainer from '../AI/AIExplainer';
@@ -28,10 +28,33 @@ export const SnippetForm = (props: Props): JSX.Element => {
     code: '',
     docs: '',
     isPinned: false,
-    tags: []
+    tags: [],
+    collectionId: undefined
   });
 
   const [useAI, setUseAI] = useState<boolean>(false);
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [loadingCollections, setLoadingCollections] = useState<boolean>(false);
+
+  useEffect(() => {
+    fetchCollections();
+  }, []);
+
+  const fetchCollections = async () => {
+    try {
+      setLoadingCollections(true);
+      const response = await fetch('/api/collections');
+      const data = await response.json();
+      
+      if (data.success) {
+        setCollections(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching collections:', error);
+    } finally {
+      setLoadingCollections(false);
+    }
+  };
 
   useEffect(() => {
     if (inEdit) {
@@ -42,11 +65,20 @@ export const SnippetForm = (props: Props): JSX.Element => {
   }, [currentSnippet]);
 
   const inputHandler = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
+    const { name, value, type } = e.target;
+    let processedValue: any = value;
+
+    if (name === 'collectionId') {
+      processedValue = value === '' ? undefined : parseInt(value, 10);
+    } else if (type === 'checkbox') {
+      processedValue = (e.target as HTMLInputElement).checked;
+    }
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: processedValue
     });
   };
 
@@ -155,6 +187,32 @@ export const SnippetForm = (props: Props): JSX.Element => {
                 Tags should be separated with a comma. Language tag will be
                 added automatically
               </div>
+            </div>
+
+            {/* COLLECTION */}
+            <div className='mb-3'>
+              <label htmlFor='collectionId' className='form-label'>
+                Collection
+              </label>
+              <select
+                className='form-select'
+                id='collectionId'
+                name='collectionId'
+                value={formData.collectionId || ''}
+                onChange={e => inputHandler(e)}
+                disabled={loadingCollections}
+              >
+                <option value=''>Select a collection (optional)</option>
+                {collections.map(collection => (
+                  <option key={collection.id} value={collection.id}>
+                    {collection.name}
+                    {collection.isDefault && ' (Default)'}
+                  </option>
+                ))}
+              </select>
+              {loadingCollections && (
+                <div className='form-text'>Loading collections...</div>
+              )}
             </div>
 
             {/* CODE SECTION */}
