@@ -5,6 +5,10 @@
       "dest": "/"
     },
     {
+      "name": "About",
+      "dest": "/about"
+    },
+    {
       "name": "Snippets",
       "dest": "/snippets"
     },
@@ -19,10 +23,6 @@
     {
       "name": "Smart Create",
       "dest": "/smart-create"
-    },
-    {
-      "name": "About",
-      "dest": "/about"
     }
   ]
 }
