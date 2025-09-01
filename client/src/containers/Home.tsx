@@ -30,8 +30,8 @@ export const Home = (): JSX.Element => {
       ) : (
         <Fragment>
           {/* Hero Section */}
-          <div className='col-12 mb-5'>
-            <div className='text-center mb-4 p-5'>
+          <div className='col-12 mb-3'>
+            <div className='text-center mb-2 p-3'>
               <h1 className='display-4 fw-bold mb-3' style={{
                 background: 'linear-gradient(135deg, #0d6efd, #0dcaf0)',
                 WebkitBackgroundClip: 'text',
@@ -40,52 +40,52 @@ export const Home = (): JSX.Element => {
               }}>
                 Snippet Box
               </h1>
-              <p className='lead text-muted mb-4'>
+              <p className='lead text-muted mb-3'>
                 Manage your code snippets with ease
               </p>
             </div>
             
             {/* Search Section */}
             <div className='row justify-content-center'>
-              <div className='col-12 col-md-8 col-lg-6'>
+              <div className='col-12 col-lg-10 col-xl-8'>
                 <SearchBar />
               </div>
             </div>
           </div>
 
           {/* Stats Section */}
-          <div className='col-12 mb-5'>
-            <div className='row g-4'>
+          <div className='col-12 mb-3'>
+            <div className='row g-3'>
               <div className='col-md-4'>
-                <div className='stats-card-modern h-100 stats-primary'>
-                  <div className='stats-icon'>
+                <div className='stats-card-compact h-100 stats-primary'>
+                  <div className='stats-icon-small'>
                     <i className='bi bi-collection'></i>
                   </div>
                   <div className='stats-content'>
-                    <div className='stats-number'>{totalSnippets}</div>
-                    <div className='stats-label'>Total Snippets</div>
+                    <div className='stats-number-small'>{totalSnippets}</div>
+                    <div className='stats-label-small'>Total Snippets</div>
                   </div>
                 </div>
               </div>
               <div className='col-md-4'>
-                <div className='stats-card-modern h-100 stats-warning'>
-                  <div className='stats-icon'>
+                <div className='stats-card-compact h-100 stats-warning'>
+                  <div className='stats-icon-small'>
                     <i className='bi bi-pin-fill'></i>
                   </div>
                   <div className='stats-content'>
-                    <div className='stats-number'>{pinnedSnippets.length}</div>
-                    <div className='stats-label'>Pinned Snippets</div>
+                    <div className='stats-number-small'>{pinnedSnippets.length}</div>
+                    <div className='stats-label-small'>Pinned Snippets</div>
                   </div>
                 </div>
               </div>
               <div className='col-md-4'>
-                <div className='stats-card-modern h-100 stats-success'>
-                  <div className='stats-icon'>
+                <div className='stats-card-compact h-100 stats-success'>
+                  <div className='stats-icon-small'>
                     <i className='bi bi-search'></i>
                   </div>
                   <div className='stats-content'>
-                    <div className='stats-number'>{hasSearched ? searchResults.length : 0}</div>
-                    <div className='stats-label'>Search Results</div>
+                    <div className='stats-number-small'>{hasSearched ? searchResults.length : 0}</div>
+                    <div className='stats-label-small'>Search Results</div>
                   </div>
                 </div>
               </div>
