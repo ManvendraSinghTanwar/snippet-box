@@ -8,6 +8,9 @@ export interface NewSnippet {
   docs?: string;
   isPinned: boolean;
   tags: string[];
+  aiExplanation?: string;
+  aiComplexity?: 'beginner' | 'intermediate' | 'advanced';
+  aiSuggestedTags?: string[];
 }
 
 export interface Snippet extends Model, NewSnippet {}

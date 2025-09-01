@@ -15,6 +15,25 @@ interface SnippetDetailsResult {
   explanation: string;
 }
 
+interface OptimizationSuggestion {
+  type: 'performance' | 'readability' | 'security' | 'best-practice' | 'bug-fix';
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  title: string;
+  description: string;
+  suggestion: string;
+  originalCode: string;
+  optimizedCode?: string;
+  lineNumber?: number;
+}
+
+interface CodeOptimizationResult {
+  overallScore: number; // 0-100
+  issues: OptimizationSuggestion[];
+  summary: string;
+  complexity: 'low' | 'medium' | 'high';
+  maintainability: 'poor' | 'fair' | 'good' | 'excellent';
+}
+
 export class AIService {
   private openai: OpenAI;
   private logger: Logger;
@@ -252,6 +271,182 @@ ${code}
     } catch (error) {
       this.logger.log('Error generating tags with AI: ' + error, 'ERROR');
       return [language.toLowerCase()];
+    }
+  }
+
+  async optimizeCode(code: string, language: string): Promise<CodeOptimizationResult> {
+    try {
+      const prompt = `Analyze this ${language} code for optimization opportunities. Focus on:
+1. Performance improvements
+2. Code readability and maintainability
+3. Security vulnerabilities
+4. Best practices
+5. Potential bugs
+
+Provide a comprehensive analysis with specific, actionable suggestions.
+
+Code:
+\`\`\`${language}
+${code}
+\`\`\`
+
+Respond with a detailed JSON analysis:
+{
+  "overallScore": 85,
+  "complexity": "medium",
+  "maintainability": "good",
+  "summary": "Overall assessment summary",
+  "issues": [
+    {
+      "type": "performance",
+      "severity": "medium",
+      "title": "Issue title",
+      "description": "Detailed description of the issue",
+      "suggestion": "How to fix it",
+      "originalCode": "problematic code snippet",
+      "optimizedCode": "improved code snippet",
+      "lineNumber": 5
+    }
+  ]
+}`;
+
+      const response = await this.openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert code reviewer and optimization specialist. Provide detailed, actionable feedback to improve code quality, performance, and maintainability. Always respond with valid JSON."
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        max_tokens: 1500,
+        temperature: 0.2,
+      });
+
+      const content = response.choices[0]?.message?.content;
+      if (!content) {
+        throw new Error('No response from OpenAI');
+      }
+
+      const optimization = JSON.parse(content);
+      
+      return {
+        overallScore: optimization.overallScore || 75,
+        complexity: optimization.complexity || 'medium',
+        maintainability: optimization.maintainability || 'fair',
+        summary: optimization.summary || 'Code analysis completed',
+        issues: optimization.issues || []
+      };
+
+    } catch (error) {
+      this.logger.log('Error optimizing code with AI: ' + error, 'ERROR');
+      
+      // Fallback analysis
+      return {
+        overallScore: 75,
+        complexity: 'medium',
+        maintainability: 'fair',
+        summary: 'AI optimization analysis temporarily unavailable',
+        issues: []
+      };
+    }
+  }
+
+  async generateOptimizedVersion(code: string, language: string, focusArea?: string): Promise<string> {
+    try {
+      const focus = focusArea ? ` Focus specifically on ${focusArea}.` : '';
+      const prompt = `Provide an optimized version of this ${language} code.${focus}
+
+Original code:
+\`\`\`${language}
+${code}
+\`\`\`
+
+Return only the optimized code with comments explaining key improvements:`;
+
+      const response = await this.openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: "You are a code optimization expert. Provide clean, efficient, and well-documented optimized code."
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        max_tokens: 1000,
+        temperature: 0.2,
+      });
+
+      return response.choices[0]?.message?.content || 'Unable to generate optimized version';
+
+    } catch (error) {
+      this.logger.log('Error generating optimized code: ' + error, 'ERROR');
+      return 'AI optimization temporarily unavailable';
+    }
+  }
+
+  async getSecurityAnalysis(code: string, language: string): Promise<OptimizationSuggestion[]> {
+    try {
+      const prompt = `Analyze this ${language} code for security vulnerabilities and potential risks:
+
+\`\`\`${language}
+${code}
+\`\`\`
+
+Focus on:
+- Input validation
+- SQL injection risks
+- XSS vulnerabilities
+- Authentication/authorization issues
+- Data exposure risks
+- Insecure dependencies
+
+Respond with JSON array of security issues:
+[
+  {
+    "type": "security",
+    "severity": "high",
+    "title": "Security issue title",
+    "description": "Detailed description",
+    "suggestion": "How to fix it",
+    "originalCode": "vulnerable code",
+    "optimizedCode": "secure code"
+  }
+]`;
+
+      const response = await this.openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: "You are a cybersecurity expert specializing in code security analysis. Identify real security vulnerabilities and provide concrete solutions."
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        max_tokens: 1200,
+        temperature: 0.1,
+      });
+
+      const content = response.choices[0]?.message?.content;
+      if (!content) {
+        return [];
+      }
+
+      const securityIssues = JSON.parse(content);
+      return Array.isArray(securityIssues) ? securityIssues : [];
+
+    } catch (error) {
+      this.logger.log('Error analyzing security: ' + error, 'ERROR');
+      return [];
     }
   }
 }

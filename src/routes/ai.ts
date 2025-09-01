@@ -136,4 +136,90 @@ router.post('/generate-snippet', asyncWrapper(async (req, res) => {
   }
 }));
 
+// Code optimization analysis endpoint
+router.post('/optimize', asyncWrapper(async (req, res) => {
+  const { code, language } = req.body;
+
+  if (!code || !language) {
+    res.status(400).json({
+      error: 'Code and language are required'
+    });
+    return;
+  }
+
+  try {
+    const aiService = getAIService();
+    const optimization = await aiService.optimizeCode(code, language);
+
+    res.json({
+      ...optimization,
+      success: true
+    });
+  } catch (error: any) {
+    res.status(503).json({
+      error: error.message || 'AI service temporarily unavailable',
+      success: false
+    });
+  }
+}));
+
+// Generate optimized version of code
+router.post('/optimize-code', asyncWrapper(async (req, res) => {
+  const { code, language, focusArea } = req.body;
+
+  if (!code || !language) {
+    res.status(400).json({
+      error: 'Code and language are required'
+    });
+    return;
+  }
+
+  try {
+    const aiService = getAIService();
+    const optimizedCode = await aiService.generateOptimizedVersion(code, language, focusArea);
+
+    res.json({
+      optimizedCode,
+      originalCode: code,
+      focusArea: focusArea || 'general',
+      success: true
+    });
+  } catch (error: any) {
+    res.status(503).json({
+      error: error.message || 'AI service temporarily unavailable',
+      success: false
+    });
+  }
+}));
+
+// Security analysis endpoint
+router.post('/security-scan', asyncWrapper(async (req, res) => {
+  const { code, language } = req.body;
+
+  if (!code || !language) {
+    res.status(400).json({
+      error: 'Code and language are required'
+    });
+    return;
+  }
+
+  try {
+    const aiService = getAIService();
+    const securityIssues = await aiService.getSecurityAnalysis(code, language);
+
+    res.json({
+      securityIssues,
+      riskLevel: securityIssues.length > 0 ? 
+        securityIssues.some((issue: any) => issue.severity === 'critical' || issue.severity === 'high') ? 'high' : 'medium' : 'low',
+      issueCount: securityIssues.length,
+      success: true
+    });
+  } catch (error: any) {
+    res.status(503).json({
+      error: error.message || 'AI service temporarily unavailable',
+      success: false
+    });
+  }
+}));
+
 export default router;
