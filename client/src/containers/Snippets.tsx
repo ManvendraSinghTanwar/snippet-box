@@ -59,76 +59,89 @@ export const Snippets = (): JSX.Element => {
           </div>
           
           <div className='col-12 col-md-4 col-lg-3'>
-            <Card>
-              <h5 className='card-title fw-bold text-primary'>All snippets</h5>
-              <div className='mb-3 d-flex justify-content-between align-items-center'>
-                <span className='fw-medium'>Total</span>
-                <span className='fw-medium'>{snippets.length}</span>
+            <div className='snippets-sidebar-modern'>
+              <div className='stats-card-modern'>
+                <div className='stats-header'>
+                  <div className='stats-icon'>
+                    <i className='bi bi-code-square'></i>
+                  </div>
+                  <div className='stats-content'>
+                    <h5 className='stats-title'>All Snippets</h5>
+                    <div className='stats-value'>{snippets.length}</div>
+                  </div>
+                </div>
               </div>
-              <hr />
 
-              <h5 className='card-title fw-bold text-primary mb-3'>Filter by tags</h5>
-              <div className='tag-filter-list'>
-                {tagCount.map((tag, idx) => {
-                  const isActiveFilter = filter === tag.name;
+              <div className='filter-card-modern'>
+                <div className='filter-header'>
+                  <h5 className='filter-title'>
+                    <i className='bi bi-funnel me-2'></i>
+                    Filter by Tags
+                  </h5>
+                </div>
+                
+                <div className='tag-filter-list-modern'>
+                  {tagCount.map((tag, idx) => {
+                    const isActiveFilter = filter === tag.name;
 
-                  return (
-                    <div
-                      key={idx}
-                      className={`d-flex justify-content-between cursor-pointer p-2 rounded mb-2 transition-all ${
-                        isActiveFilter 
-                          ? 'bg-primary text-white' 
-                          : 'hover-bg-light'
-                      }`}
-                      onClick={() => filterHandler(tag.name)}
-                      style={{ 
-                        transition: 'all 0.3s ease',
-                        backgroundColor: isActiveFilter ? '#0d6efd' : 'transparent'
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!isActiveFilter) {
-                          e.currentTarget.style.backgroundColor = '#f8f9fa';
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isActiveFilter) {
-                          e.currentTarget.style.backgroundColor = 'transparent';
-                        }
-                      }}
-                    >
-                      <span className='fw-medium'>{tag.name}</span>
-                      <span className='fw-medium'>{tag.count}</span>
-                    </div>
-                  );
-                })}
+                    return (
+                      <div
+                        key={idx}
+                        className={`tag-filter-item ${isActiveFilter ? 'active' : ''}`}
+                        onClick={() => filterHandler(tag.name)}
+                      >
+                        <div className='tag-filter-content'>
+                          <span className='tag-filter-name'>#{tag.name}</span>
+                          <span className='tag-filter-count'>{tag.count}</span>
+                        </div>
+                        <div className='tag-filter-indicator'></div>
+                      </div>
+                    );
+                  })}
+                </div>
+                
+                <div className='filter-actions'>
+                  <button
+                    className='btn btn-clear-filters'
+                    onClick={clearFilterHandler}
+                  >
+                    <i className='bi bi-arrow-clockwise me-2'></i>
+                    {showSearchResults ? 'Clear search & filters' : 'Clear filters'}
+                  </button>
+                </div>
               </div>
-              <div className='d-grid mt-3'>
-                <Button
-                  text={showSearchResults ? 'Clear search & filters' : 'Clear filters'}
-                  color='secondary'
-                  small
-                  outline
-                  handler={clearFilterHandler}
-                />
-              </div>
-            </Card>
+            </div>
           </div>
           <div className='col-12 col-md-8 col-lg-9'>
             {showSearchResults && (
-              <div className='mb-3'>
-                <div className='alert alert-info'>
-                  <strong>Search Results:</strong> Found {searchResults.length} snippet(s)
+              <div className='mb-4'>
+                <div className='results-alert search-results'>
+                  <div className='results-icon'>
+                    <i className='bi bi-search'></i>
+                  </div>
+                  <div className='results-content'>
+                    <strong>Search Results</strong>
+                    <span>Found {searchResults.length} snippet(s) matching your query</span>
+                  </div>
                 </div>
               </div>
             )}
             {filter && !showSearchResults && (
-              <div className='mb-3'>
-                <div className='alert alert-info'>
-                  <strong>Filtered by tag:</strong> {filter} ({localSnippets.length} snippet(s))
+              <div className='mb-4'>
+                <div className='results-alert filter-results'>
+                  <div className='results-icon'>
+                    <i className='bi bi-funnel'></i>
+                  </div>
+                  <div className='results-content'>
+                    <strong>Filtered by tag: #{filter}</strong>
+                    <span>Showing {localSnippets.length} snippet(s)</span>
+                  </div>
                 </div>
               </div>
             )}
-            <SnippetGrid snippets={displaySnippets} />
+            <div className='snippets-grid-wrapper'>
+              <SnippetGrid snippets={displaySnippets} />
+            </div>
           </div>
         </Fragment>
       )}
