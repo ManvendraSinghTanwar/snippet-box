@@ -31,61 +31,86 @@ export const Home = (): JSX.Element => {
         <Fragment>
           {/* Hero Section */}
           <div className='col-12 mb-5'>
-            <div className='text-center mb-4'>
-              <h1 className='display-4 fw-bold text-primary mb-3'>
-                <i className='bi bi-code-slash me-3'></i>
-                Snippet Box
-              </h1>
-              <p className='lead text-muted mb-4'>
-                Search through your code snippets with powerful filters
-              </p>
+            <div className='hero-section-modern mb-4'>
+              <div className='hero-content text-center'>
+                <div className='hero-icon mb-4'>
+                  <i className='bi bi-code-slash'></i>
+                </div>
+                <h1 className='hero-title display-3 fw-bold mb-3'>
+                  Snippet Box
+                </h1>
+                <p className='hero-subtitle lead mb-4'>
+                  Your personal code snippet manager with AI-powered search and smart organization
+                </p>
+                <div className='hero-badges mb-4'>
+                  <span className='badge hero-badge me-2'>
+                    <i className='bi bi-lightning-charge me-1'></i>
+                    Fast Search
+                  </span>
+                  <span className='badge hero-badge me-2'>
+                    <i className='bi bi-robot me-1'></i>
+                    AI Powered
+                  </span>
+                  <span className='badge hero-badge'>
+                    <i className='bi bi-palette me-1'></i>
+                    Beautiful UI
+                  </span>
+                </div>
+              </div>
             </div>
             
             {/* Search Section */}
             <div className='row justify-content-center'>
               <div className='col-12 col-lg-8'>
-                <div className='card search-card shadow-sm border-0'>
-                  <div className='card-body p-4'>
-                    <SearchBar />
+                <div className='search-card-modern shadow-lg'>
+                  <div className='search-header mb-3'>
+                    <h5 className='search-title'>
+                      <i className='bi bi-search me-2'></i>
+                      Find your snippets instantly
+                    </h5>
+                    <p className='search-subtitle mb-0'>
+                      Search by title, description, language, or tags
+                    </p>
                   </div>
+                  <SearchBar />
                 </div>
               </div>
             </div>
           </div>
 
           {/* Stats Section */}
-          <div className='col-12 mb-4'>
-            <div className='row g-3'>
+          <div className='col-12 mb-5'>
+            <div className='row g-4'>
               <div className='col-md-4'>
-                <div className='card stats-card h-100 border-0 shadow-sm'>
-                  <div className='card-body text-center'>
-                    <div className='display-6 text-primary mb-2'>
-                      <i className='bi bi-collection'></i>
-                    </div>
-                    <h4 className='text-primary mb-1'>{totalSnippets}</h4>
-                    <p className='text-muted mb-0'>Total Snippets</p>
+                <div className='stats-card-modern h-100 stats-primary'>
+                  <div className='stats-icon'>
+                    <i className='bi bi-collection'></i>
+                  </div>
+                  <div className='stats-content'>
+                    <div className='stats-number'>{totalSnippets}</div>
+                    <div className='stats-label'>Total Snippets</div>
                   </div>
                 </div>
               </div>
               <div className='col-md-4'>
-                <div className='card stats-card h-100 border-0 shadow-sm'>
-                  <div className='card-body text-center'>
-                    <div className='display-6 text-warning mb-2'>
-                      <i className='bi bi-pin'></i>
-                    </div>
-                    <h4 className='text-warning mb-1'>{pinnedSnippets.length}</h4>
-                    <p className='text-muted mb-0'>Pinned Snippets</p>
+                <div className='stats-card-modern h-100 stats-warning'>
+                  <div className='stats-icon'>
+                    <i className='bi bi-pin-fill'></i>
+                  </div>
+                  <div className='stats-content'>
+                    <div className='stats-number'>{pinnedSnippets.length}</div>
+                    <div className='stats-label'>Pinned Snippets</div>
                   </div>
                 </div>
               </div>
               <div className='col-md-4'>
-                <div className='card stats-card h-100 border-0 shadow-sm'>
-                  <div className='card-body text-center'>
-                    <div className='display-6 text-success mb-2'>
-                      <i className='bi bi-search'></i>
-                    </div>
-                    <h4 className='text-success mb-1'>{hasSearched ? searchResults.length : 0}</h4>
-                    <p className='text-muted mb-0'>Search Results</p>
+                <div className='stats-card-modern h-100 stats-success'>
+                  <div className='stats-icon'>
+                    <i className='bi bi-search'></i>
+                  </div>
+                  <div className='stats-content'>
+                    <div className='stats-number'>{hasSearched ? searchResults.length : 0}</div>
+                    <div className='stats-label'>Search Results</div>
                   </div>
                 </div>
               </div>
@@ -95,12 +120,17 @@ export const Home = (): JSX.Element => {
           {/* Search Results Section */}
           {hasSearched && (
             <div className='col-12 mb-5'>
-              <div className='d-flex align-items-center justify-content-between mb-4 section-header text-success'>
-                <h3 className='mb-0'>
-                  <i className='bi bi-search me-2'></i>
-                  Search Results
-                </h3>
-                <span className='badge bg-success fs-6'>{searchResults.length} found</span>
+              <div className='section-header-modern success mb-4'>
+                <div className='section-icon'>
+                  <i className='bi bi-search'></i>
+                </div>
+                <div className='section-content'>
+                  <h3 className='section-title'>Search Results</h3>
+                  <p className='section-subtitle'>{searchResults.length} snippets found</p>
+                </div>
+                <div className='section-badge'>
+                  <span className='badge bg-success'>{searchResults.length}</span>
+                </div>
               </div>
               <SnippetGrid snippets={searchResults} />
             </div>
@@ -109,12 +139,17 @@ export const Home = (): JSX.Element => {
           {/* Pinned Snippets Section */}
           {pinnedSnippets.length > 0 && (
             <div className='col-12 mb-5'>
-              <div className='d-flex align-items-center justify-content-between mb-4 section-header text-warning'>
-                <h3 className='mb-0'>
-                  <i className='bi bi-pin-fill me-2'></i>
-                  Pinned Snippets
-                </h3>
-                <span className='badge bg-warning text-dark fs-6'>{pinnedSnippets.length} pinned</span>
+              <div className='section-header-modern warning mb-4'>
+                <div className='section-icon'>
+                  <i className='bi bi-pin-fill'></i>
+                </div>
+                <div className='section-content'>
+                  <h3 className='section-title'>Pinned Snippets</h3>
+                  <p className='section-subtitle'>Your most important code snippets</p>
+                </div>
+                <div className='section-badge'>
+                  <span className='badge bg-warning text-dark'>{pinnedSnippets.length}</span>
+                </div>
               </div>
               <SnippetGrid snippets={pinnedSnippets} />
             </div>
@@ -123,12 +158,17 @@ export const Home = (): JSX.Element => {
           {/* Recent Snippets Section */}
           {!hasSearched && recentSnippets.length > 0 && (
             <div className='col-12 mb-5'>
-              <div className='d-flex align-items-center justify-content-between mb-4 section-header text-info'>
-                <h3 className='mb-0'>
-                  <i className='bi bi-clock-history me-2'></i>
-                  Recent Snippets
-                </h3>
-                <span className='badge bg-info fs-6'>Latest updates</span>
+              <div className='section-header-modern info mb-4'>
+                <div className='section-icon'>
+                  <i className='bi bi-clock-history'></i>
+                </div>
+                <div className='section-content'>
+                  <h3 className='section-title'>Recent Snippets</h3>
+                  <p className='section-subtitle'>Latest additions and updates</p>
+                </div>
+                <div className='section-badge'>
+                  <span className='badge bg-info'>Recent</span>
+                </div>
               </div>
               <SnippetGrid snippets={recentSnippets} />
             </div>
@@ -137,26 +177,30 @@ export const Home = (): JSX.Element => {
           {/* Popular Tags Section */}
           {!hasSearched && (
             <div className='col-12 mb-5'>
-              <div className='card border-0 shadow-sm'>
-                <div className='card-body p-4'>
-                  <h5 className='card-title text-primary mb-3'>
-                    <i className='bi bi-tags me-2'></i>
-                    Popular Tags
-                  </h5>
-                  <div className='d-flex flex-wrap gap-2'>
-                    {['javascript', 'react', 'typescript', 'python', 'css', 'html', 'node.js', 'api'].map((tag) => (
-                      <span 
-                        key={tag}
-                        className='badge bg-light text-dark border cursor-pointer hover-primary'
-                        onClick={() => {
-                          // This could trigger a search for this tag
-                          console.log(`Search for tag: ${tag}`);
-                        }}
-                      >
-                        #{tag}
-                      </span>
-                    ))}
+              <div className='popular-tags-card'>
+                <div className='popular-tags-header'>
+                  <div className='tags-icon'>
+                    <i className='bi bi-tags'></i>
                   </div>
+                  <div className='tags-content'>
+                    <h5 className='tags-title'>Popular Tags</h5>
+                    <p className='tags-subtitle'>Quick search by popular categories</p>
+                  </div>
+                </div>
+                <div className='tags-grid'>
+                  {['javascript', 'react', 'typescript', 'python', 'css', 'html', 'node.js', 'api'].map((tag) => (
+                    <button 
+                      key={tag}
+                      className='tag-pill'
+                      onClick={() => {
+                        // This could trigger a search for this tag
+                        console.log(`Search for tag: ${tag}`);
+                      }}
+                    >
+                      <span className='tag-hash'>#</span>
+                      <span className='tag-name'>{tag}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
@@ -165,36 +209,39 @@ export const Home = (): JSX.Element => {
           {/* Quick Tips Section */}
           {!hasSearched && (
             <div className='col-12 mb-5'>
-              <div className='card border-0 shadow-sm bg-light'>
-                <div className='card-body p-4'>
-                  <h5 className='card-title text-info mb-3'>
-                    <i className='bi bi-lightbulb me-2'></i>
-                    Quick Tips
-                  </h5>
-                  <div className='row g-3'>
-                    <div className='col-md-4'>
-                      <div className='d-flex align-items-start'>
-                        <i className='bi bi-keyboard text-primary me-2 mt-1'></i>
-                        <small className='text-muted'>
-                          Use <kbd>Ctrl+K</kbd> to quickly open search
-                        </small>
-                      </div>
+              <div className='quick-tips-card'>
+                <div className='quick-tips-header'>
+                  <div className='tips-icon'>
+                    <i className='bi bi-lightbulb'></i>
+                  </div>
+                  <div className='tips-content'>
+                    <h5 className='tips-title'>Quick Tips</h5>
+                    <p className='tips-subtitle'>Pro tips to enhance your productivity</p>
+                  </div>
+                </div>
+                <div className='tips-grid'>
+                  <div className='tip-item'>
+                    <div className='tip-icon primary'>
+                      <i className='bi bi-keyboard'></i>
                     </div>
-                    <div className='col-md-4'>
-                      <div className='d-flex align-items-start'>
-                        <i className='bi bi-pin text-warning me-2 mt-1'></i>
-                        <small className='text-muted'>
-                          Pin frequently used snippets for quick access
-                        </small>
-                      </div>
+                    <div className='tip-content'>
+                      <div className='tip-text'>Use <kbd>Ctrl+K</kbd> to quickly open search</div>
                     </div>
-                    <div className='col-md-4'>
-                      <div className='d-flex align-items-start'>
-                        <i className='bi bi-collection text-success me-2 mt-1'></i>
-                        <small className='text-muted'>
-                          Organize snippets into collections by project
-                        </small>
-                      </div>
+                  </div>
+                  <div className='tip-item'>
+                    <div className='tip-icon warning'>
+                      <i className='bi bi-pin'></i>
+                    </div>
+                    <div className='tip-content'>
+                      <div className='tip-text'>Pin frequently used snippets for quick access</div>
+                    </div>
+                  </div>
+                  <div className='tip-item'>
+                    <div className='tip-icon success'>
+                      <i className='bi bi-collection'></i>
+                    </div>
+                    <div className='tip-content'>
+                      <div className='tip-text'>Organize snippets into collections by project</div>
                     </div>
                   </div>
                 </div>
@@ -204,30 +251,54 @@ export const Home = (): JSX.Element => {
 
           {/* Quick Actions */}
           <div className='col-12'>
-            <div className='card border-0 quick-actions'>
-              <div className='card-body text-center py-4'>
-                <h5 className='card-title text-muted mb-3'>
-                  <i className='bi bi-lightning-charge me-2'></i>
-                  Quick Actions
-                </h5>
-                <div className='d-flex flex-wrap justify-content-center gap-3'>
-                  <a href='/editor' className='btn btn-primary btn-lg'>
-                    <i className='bi bi-plus-circle me-2'></i>
-                    Create New Snippet
-                  </a>
-                  <a href='/snippets' className='btn btn-outline-primary btn-lg'>
-                    <i className='bi bi-collection me-2'></i>
-                    Browse All Snippets
-                  </a>
-                  <a href='/collections' className='btn btn-outline-secondary btn-lg'>
-                    <i className='bi bi-folder2 me-2'></i>
-                    Manage Collections
-                  </a>
-                  <a href='/about' className='btn btn-outline-info btn-lg'>
-                    <i className='bi bi-info-circle me-2'></i>
-                    Learn More
-                  </a>
+            <div className='quick-actions-modern'>
+              <div className='quick-actions-header text-center mb-4'>
+                <div className='actions-icon mx-auto mb-3'>
+                  <i className='bi bi-lightning-charge'></i>
                 </div>
+                <h5 className='actions-title'>Quick Actions</h5>
+                <p className='actions-subtitle'>Start creating and managing your snippets</p>
+              </div>
+              <div className='actions-grid'>
+                <a href='/editor' className='action-card primary'>
+                  <div className='action-icon'>
+                    <i className='bi bi-plus-circle'></i>
+                  </div>
+                  <div className='action-content'>
+                    <h6 className='action-title'>Create Snippet</h6>
+                    <p className='action-description'>Add a new code snippet</p>
+                  </div>
+                </a>
+                
+                <a href='/snippets' className='action-card info'>
+                  <div className='action-icon'>
+                    <i className='bi bi-collection'></i>
+                  </div>
+                  <div className='action-content'>
+                    <h6 className='action-title'>Browse All</h6>
+                    <p className='action-description'>View all your snippets</p>
+                  </div>
+                </a>
+                
+                <a href='/collections' className='action-card secondary'>
+                  <div className='action-icon'>
+                    <i className='bi bi-folder2'></i>
+                  </div>
+                  <div className='action-content'>
+                    <h6 className='action-title'>Collections</h6>
+                    <p className='action-description'>Organize by project</p>
+                  </div>
+                </a>
+                
+                <a href='/about' className='action-card success'>
+                  <div className='action-icon'>
+                    <i className='bi bi-info-circle'></i>
+                  </div>
+                  <div className='action-content'>
+                    <h6 className='action-title'>Learn More</h6>
+                    <p className='action-description'>About Snippet Box</p>
+                  </div>
+                </a>
               </div>
             </div>
           </div>

@@ -6,12 +6,14 @@ const ThemeToggle: React.FC = () => {
 
   return (
     <button
-      className="theme-toggle-btn btn btn-sm ms-2"
+      className="theme-toggle-btn btn btn-sm d-flex align-items-center"
       onClick={toggleTheme}
       title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
     >
-      <i className={`fas ${theme === 'light' ? 'fa-moon' : 'fa-sun'} me-2`}></i>
+      <div className="theme-icon-wrapper me-2">
+        <i className={`bi ${theme === 'light' ? 'bi-moon-stars' : 'bi-sun'}`}></i>
+      </div>
       <span className="theme-text">
         {theme === 'light' ? 'Dark' : 'Light'}
       </span>
