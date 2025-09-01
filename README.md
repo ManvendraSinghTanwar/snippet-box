@@ -1,21 +1,65 @@
-# 📦 Snippet Box
+# 📦 Snippet Box - Digital Resurrection
 
 ![Snippet library screenshot](./.github/img/snippets.png)
 
-## 🎯 Description
+## � Code Resurrection Hackathon Submission
 
-**Snippet Box** is a modern, self-hosted code snippet management application built with React/TypeScript frontend and Node.js/Express backend that helps developers organize, search, and manage their code snippets efficiently. It features AI-powered snippet creation using OpenAI integration that automatically detects programming languages and generates intelligent titles, descriptions, and tags, along with advanced search capabilities through tags and languages, a responsive Bootstrap-based UI, pinned favorites for quick access, and collections for organized grouping.
+**This project is a "digital resurrection" of the original [Snippet Box](https://github.com/pawelmalak/snippet-box) by [pawelmalak](https://github.com/pawelmalak), created for the [Code Resurrection Hackathon].**
 
-## ✨ Key Features
+### 🔬 Archaeological Discovery
+- **Original Repository**: [pawelmalak/snippet-box](https://github.com/pawelmalak/snippet-box)
+- **Status**: Last significant update ~2 years ago, minimal recent activity
+- **Stars**: 2.2k+ stars indicating strong community interest
+- **Cause of Abandonment**: Creator moved on to other projects, maintenance became sporadic
 
-- 🤖 **AI-Powered Creation** - Auto-detect language, generate titles, descriptions, and tags
-- 🔍 **Advanced Search** - Multi-filter search by tags, languages, titles, and content
-- 📌 **Pinned Snippets** - Quick access to frequently used code
-- 📁 **Collections System** - Organize snippets into grouped collections  
-- 🎨 **Modern UI** - Responsive Bootstrap design with custom styling
-- 💾 **Self-Hosted** - Your data stays with you using SQLite database
-- ⚡ **Fast Performance** - Optimized queries and efficient caching
-- 🔐 **Secure** - Built-in rate limiting and input validation
+### 🚀 Resurrection Goals
+- **Modernize** the codebase with latest TypeScript and React patterns
+- **Enhance** with AI-powered snippet creation using OpenAI integration
+- **Improve** search functionality with advanced filtering
+- **Redesign** UI with modern Bootstrap 5 and custom styling
+- **Add** comprehensive About page and better user onboarding
+
+## �🎯 Description
+
+**Snippet Box** is a modern, self-hosted code snippet management application built with React/TypeScript frontend and Node.js/Express backend that helps developers organize, search, and manage their code snippets efficiently. This resurrected version features AI-powered snippet creation using OpenAI integration that automatically detects programming languages and generates intelligent titles, descriptions, and tags, along with advanced search capabilities through tags and languages, a responsive Bootstrap-based UI, pinned favorites for quick access, and collections for organized grouping.
+
+## 🔄 Resurrection Enhancements
+
+### 🆕 **What We Added (Digital Archaeology Results)**
+
+#### **🤖 AI-Powered Features**
+- **Smart Snippet Creation** - OpenAI integration for auto-generating titles, descriptions, and tags
+- **Language Detection** - Automatic programming language identification
+- **Intelligent Suggestions** - AI-driven tag and description recommendations
+
+#### **🔍 Enhanced Search System** 
+- **Multi-Filter Search** - Advanced filtering by tags, languages, titles, and content
+- **Real-Time Results** - Instant search with debounced queries  
+- **Popular Tags Section** - Quick access to frequently used tags
+- **Search History** - Track and revisit previous searches
+
+#### **🎨 Modern UI/UX Redesign**
+- **Bootstrap 5 Upgrade** - Modern component library with custom SCSS
+- **Enhanced Home Dashboard** - Statistics cards, quick tips, and improved navigation
+- **Responsive Design** - Mobile-first approach with better accessibility
+- **Visual Polish** - Smooth animations, hover effects, and modern styling
+
+#### **📋 Improved Organization**
+- **Enhanced Collections** - Better visual organization and management
+- **Quick Actions** - Streamlined workflow for common tasks
+- **Pinned Snippets** - Priority access to frequently used code
+- **Bulk Operations** - Manage multiple snippets efficiently
+
+#### **📄 Comprehensive Documentation**
+- **About Page** - Detailed feature overview and value proposition
+- **User Guides** - Integrated help and tips throughout the interface
+- **Better Navigation** - Improved routing and user flow
+
+### 🔧 **Technical Modernizations**
+- **TypeScript Enhancement** - Improved type safety and developer experience
+- **Performance Optimization** - Faster queries and efficient caching
+- **Modern Build System** - Updated dependencies and build processes
+- **Security Improvements** - Enhanced validation and rate limiting
 
 ## 🛠️ Technology Stack
 
@@ -243,11 +287,51 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 **Acknowledgments**
+## 🙏 **Acknowledgments & Attribution**
 
-- Original project by [pawelmalak](https://github.com/pawelmalak/snippet-box)
-- Enhanced and extended by [ManvendraSinghTanwar](https://github.com/ManvendraSinghTanwar)
+### **Original Project**
+- **Created by**: [pawelmalak](https://github.com/pawelmalak) - Original Snippet Box concept and implementation
+- **Original Repository**: [pawelmalak/snippet-box](https://github.com/pawelmalak/snippet-box)
+- **License**: MIT License (preserved from original)
+
+### **Hackathon Context**
+- **Event**: [Code Resurrection Hackathon](https://raptors.dev) by Hackathon Raptors
+- **Dates**: August 29 - September 8, 2025
+- **Theme**: Digital archaeology - bringing abandoned projects back to life
+- **Organizer**: Hackathon Raptors (UK C.I.C — 15557917)
+
+### **Resurrection Team**
+- **Digital Archaeologist**: [ManvendraSinghTanwar](https://github.com/ManvendraSinghTanwar)
+- **Resurrection Period**: August 29 - September 1, 2025
+- **Enhancement Focus**: AI integration, modern UI/UX, and advanced search
+
+### **Technology Credits**
 - Built with amazing open-source technologies
+- OpenAI API for intelligent snippet creation
+- Bootstrap team for the excellent UI framework
+- React and TypeScript communities for robust development tools
+
+## 📊 **Archaeological Analysis**
+
+### **Why This Project Was Worth Resurrecting**
+1. **Strong Community Interest** - 2.2k+ GitHub stars indicate real user value
+2. **Solid Architecture** - Well-structured codebase with good separation of concerns  
+3. **Clear Use Case** - Addresses real developer pain point of snippet management
+4. **Modernization Potential** - Perfect candidate for AI enhancement and UI improvements
+5. **Educational Value** - Excellent example of full-stack TypeScript development
+
+### **Original Challenges Addressed**
+- **Limited Search** → Enhanced with AI-powered multi-filter search
+- **Basic UI** → Redesigned with modern Bootstrap 5 and custom styling
+- **Manual Creation** → Added AI-assisted snippet generation
+- **Poor Organization** → Improved collections and tagging system
+- **Minimal Documentation** → Comprehensive guides and about page
+
+### **Impact of Resurrection**
+- **Enhanced User Experience** - Modern, intuitive interface
+- **Increased Productivity** - AI-powered features save time
+- **Better Organization** - Advanced search and filtering capabilities
+- **Future-Ready** - Modern tech stack for continued development
 
 ## 📞 **Support**
 
