@@ -301,50 +301,79 @@ export const searchSnippets = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { query, tags, languages } = <SearchQuery>req.body;
 
-    // Check if query is empty
-    if (query === '' && !tags.length && !languages.length) {
+    // Check if all search parameters are empty
+    if (!query && !tags.length && !languages.length) {
       res.status(200).json({
         data: []
       });
-
       return;
     }
 
-    const languageFilter = languages.length
-      ? { [Op.in]: languages }
-      : { [Op.notIn]: languages };
+    // Build where conditions
+    const whereConditions: any = {};
+    const includeConditions: any = [];
 
-    const tagFilter = tags.length ? { [Op.in]: tags } : { [Op.notIn]: tags };
+    // Add text search condition if query is provided
+    if (query && query.trim() !== '') {
+      whereConditions[Op.or] = [
+        { title: { [Op.substring]: query.trim() } },
+        { description: { [Op.substring]: query.trim() } },
+        { code: { [Op.substring]: query.trim() } }
+      ];
+    }
+
+    // Add language filter if provided
+    if (languages.length > 0) {
+      whereConditions.language = { [Op.in]: languages };
+    }
+
+    // Base include for tags (always include to get tag data)
+    const tagInclude: any = {
+      model: TagModel,
+      as: 'tags',
+      attributes: ['name'],
+      through: {
+        attributes: []
+      }
+    };
+
+    // Add tag filter if provided
+    if (tags.length > 0) {
+      tagInclude.where = {
+        name: { [Op.in]: tags }
+      };
+      tagInclude.required = true; // Inner join when filtering by tags
+    } else {
+      tagInclude.required = false; // Left join when not filtering by tags
+    }
+
+    includeConditions.push(tagInclude);
+
+    // Add collection include
+    includeConditions.push({
+      model: require('../models').CollectionModel,
+      as: 'collection',
+      attributes: ['id', 'name', 'color', 'icon'],
+      required: false
+    });
 
     const snippets = await SnippetModel.findAll({
-      where: {
-        [Op.and]: [
-          {
-            [Op.or]: [
-              { title: { [Op.substring]: `${query}` } },
-              { description: { [Op.substring]: `${query}` } }
-            ]
-          },
-          {
-            language: languageFilter
-          }
-        ]
-      },
-      include: {
-        model: TagModel,
-        as: 'tags',
-        attributes: ['name'],
-        where: {
-          name: tagFilter
-        },
-        through: {
-          attributes: []
-        }
-      }
+      where: whereConditions,
+      include: includeConditions,
+      order: [['updatedAt', 'DESC']]
+    });
+
+    // Transform the results to match the expected format
+    const populatedSnippets = snippets.map(snippet => {
+      const rawSnippet = snippet.get({ plain: true });
+      return {
+        ...rawSnippet,
+        tags: rawSnippet.tags?.map((tag: any) => tag.name) || []
+      };
     });
 
     res.status(200).json({
-      data: snippets
+      data: populatedSnippets
     });
   }
 );

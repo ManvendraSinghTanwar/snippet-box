@@ -1,15 +1,17 @@
 import { useEffect, useContext, useState, Fragment } from 'react';
 import { SnippetsContext } from '../store';
 import { SnippetGrid } from '../components/Snippets/SnippetGrid';
-import { Button, Card, EmptyState, Layout } from '../components/UI';
+import { Button, Card, EmptyState, Layout, PageHeader } from '../components/UI';
+import { SearchBar } from '../components/SearchBar';
 import { Snippet } from '../typescript/interfaces';
 
 export const Snippets = (): JSX.Element => {
-  const { snippets, tagCount, getSnippets, countTags } =
+  const { snippets, tagCount, searchResults, getSnippets, countTags } =
     useContext(SnippetsContext);
 
   const [filter, setFilter] = useState<string | null>(null);
   const [localSnippets, setLocalSnippets] = useState<Snippet[]>([]);
+  const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
 
   useEffect(() => {
     getSnippets();
@@ -20,6 +22,16 @@ export const Snippets = (): JSX.Element => {
     setLocalSnippets([...snippets]);
   }, [snippets]);
 
+  // Watch for search results
+  useEffect(() => {
+    if (searchResults.length > 0) {
+      setShowSearchResults(true);
+      setFilter(null); // Clear tag filter when searching
+    } else {
+      setShowSearchResults(false);
+    }
+  }, [searchResults]);
+
   const filterHandler = (tag: string) => {
     setFilter(tag);
     const filteredSnippets = snippets.filter(s => s.tags.includes(tag));
@@ -28,8 +40,12 @@ export const Snippets = (): JSX.Element => {
 
   const clearFilterHandler = () => {
     setFilter(null);
+    setShowSearchResults(false);
     setLocalSnippets([...snippets]);
   };
+
+  // Get the snippets to display based on current state
+  const displaySnippets = showSearchResults ? searchResults : localSnippets;
 
   return (
     <Layout>
@@ -37,6 +53,11 @@ export const Snippets = (): JSX.Element => {
         <EmptyState />
       ) : (
         <Fragment>
+          <PageHeader title='All Snippets' />
+          <div className='col-12 mb-4'>
+            <SearchBar />
+          </div>
+          
           <div className='col-12 col-md-4 col-lg-3'>
             <Card>
               <h5 className='card-title fw-bold text-primary'>All snippets</h5>
@@ -83,7 +104,7 @@ export const Snippets = (): JSX.Element => {
               </div>
               <div className='d-grid mt-3'>
                 <Button
-                  text='Clear filters'
+                  text={showSearchResults ? 'Clear search & filters' : 'Clear filters'}
                   color='secondary'
                   small
                   outline
@@ -93,7 +114,21 @@ export const Snippets = (): JSX.Element => {
             </Card>
           </div>
           <div className='col-12 col-md-8 col-lg-9'>
-            <SnippetGrid snippets={localSnippets} />
+            {showSearchResults && (
+              <div className='mb-3'>
+                <div className='alert alert-info'>
+                  <strong>Search Results:</strong> Found {searchResults.length} snippet(s)
+                </div>
+              </div>
+            )}
+            {filter && !showSearchResults && (
+              <div className='mb-3'>
+                <div className='alert alert-info'>
+                  <strong>Filtered by tag:</strong> {filter} ({localSnippets.length} snippet(s))
+                </div>
+              </div>
+            )}
+            <SnippetGrid snippets={displaySnippets} />
           </div>
         </Fragment>
       )}
