@@ -36,85 +36,96 @@ export const SnippetDetails = (props: Props): JSX.Element => {
   // };
 
   return (
-    <Card>
-      <h5 className='card-title d-flex align-items-center justify-content-between'>
-        {title}
-        <SnippetPin id={id} isPinned={isPinned} />
-      </h5>
-      <p>{description}</p>
-
-      {/* LANGUAGE */}
-      <div className={`d-flex justify-content-between`}>
-        <span>Language</span>
-        <span className='fw-bold'>{language}</span>
+    <div className='snippet-details-modern'>
+      <div className='snippet-details-header'>
+        <div className='snippet-title-section'>
+          <h4 className='details-title'>Snippet Details</h4>
+          <SnippetPin id={id} isPinned={isPinned} />
+        </div>
       </div>
 
-      {/* CREATED AT */}
-      <div className={`d-flex justify-content-between`}>
-        <span>Created</span>
-        <span>{creationDate.relative}</span>
+      <div className='snippet-meta-grid'>
+        <div className='meta-item'>
+          <span className='meta-label'>Description</span>
+          <span className='meta-value'>{description || 'No description provided'}</span>
+        </div>
+
+        <div className='meta-item'>
+          <span className='meta-label'>Language</span>
+          <span className='meta-value language-value'>{language}</span>
+        </div>
+
+        <div className='meta-item'>
+          <span className='meta-label'>Created</span>
+          <span className='meta-value'>{creationDate.relative}</span>
+        </div>
+
+        <div className='meta-item'>
+          <span className='meta-label'>Last Updated</span>
+          <span className='meta-value'>{updateDate.relative}</span>
+        </div>
       </div>
 
-      {/* UPDATED AT */}
-      <div className={`d-flex justify-content-between`}>
-        <span>Last updated</span>
-        <span>{updateDate.relative}</span>
+      {tags.length > 0 && (
+        <div className='tags-section-modern'>
+          <span className='tags-label'>Tags</span>
+          <div className='tags-container'>
+            {tags.map((tag, idx) => (
+              <span className='tag-pill-view' key={idx}>
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className='actions-section-modern'>
+        <div className='primary-actions'>
+          <button
+            className='btn-action-modern primary'
+            onClick={() => copy(code)}
+          >
+            <i className='bi bi-clipboard'></i>
+            Copy Code
+          </button>
+          
+          <button
+            className='btn-action-modern secondary'
+            onClick={() => {
+              setSnippet(id);
+              history.push({
+                pathname: `/editor/${id}`,
+                state: { from: window.location.pathname }
+              });
+            }}
+          >
+            <i className='bi bi-pencil'></i>
+            Edit
+          </button>
+        </div>
+
+        <div className='secondary-actions'>
+          <button
+            className='btn-action-modern outline'
+            onClick={() => {
+              const { protocol, host } = window.location;
+              const rawUrl = `${protocol}//${host}/api/snippets/raw/${id}`;
+              copy(rawUrl);
+            }}
+          >
+            <i className='bi bi-link-45deg'></i>
+            Copy URL
+          </button>
+          
+          <button
+            className='btn-action-modern danger'
+            onClick={() => deleteSnippet(id)}
+          >
+            <i className='bi bi-trash'></i>
+            Delete
+          </button>
+        </div>
       </div>
-      <hr />
-
-      {/* TAGS */}
-      <div>
-        {tags.map((tag, idx) => (
-          <span className='me-2' key={idx}>
-            <Badge text={tag} color='light' />
-          </span>
-        ))}
-      </div>
-      <hr />
-
-      {/* ACTIONS */}
-      <div className='d-grid g-2' style={{ rowGap: '10px' }}>
-        <Button
-          text='Delete'
-          color='danger'
-          small
-          outline
-          handler={() => deleteSnippet(id)}
-        />
-
-        <Button
-          text='Edit'
-          color='secondary'
-          small
-          outline
-          handler={() => {
-            setSnippet(id);
-            history.push({
-              pathname: `/editor/${id}`,
-              state: { from: window.location.pathname }
-            });
-          }}
-        />
-
-        <Button
-          text='Copy raw url'
-          color='secondary'
-          small
-          outline
-          handler={() => {
-            const { protocol, host } = window.location;
-            const rawUrl = `${protocol}//${host}/api/snippets/raw/${id}`;
-            copy(rawUrl);
-          }}
-        />
-
-        <Button
-          text='Copy code'
-          color='secondary'
-          small
-          handler={() => copy(code)}
-        />
-      </div>
-    </Card>
+    </div>
   );
 };

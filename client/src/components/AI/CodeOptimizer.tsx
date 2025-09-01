@@ -155,158 +155,225 @@ const CodeOptimizer: React.FC<CodeOptimizerProps> = ({ code, language }) => {
 
   return (
     <div className="code-optimizer">
-      <div className="d-flex align-items-center justify-content-between mb-3">
-        <h6 className="mb-0">🚀 AI Code Optimization</h6>
-        <div className="btn-group" role="group">
-          <Button
-            text={loading === 'analysis' ? 'Analyzing...' : 'Analyze Code'}
-            color="primary"
-            outline={true}
-            small={true}
-            handler={analyzeCode}
+      {/* Modern Header */}
+      <div className="optimizer-header">
+        <div className="optimizer-title">
+          <div className="title-icon">
+            <i className="bi bi-cpu"></i>
+          </div>
+          <div className="title-content">
+            <h5 className="title-text">AI Code Optimization</h5>
+            <p className="title-subtitle">Analyze, secure, and optimize your code with AI</p>
+          </div>
+        </div>
+        
+        <div className="optimizer-actions">
+          <button
+            className={`action-btn ${loading === 'analysis' ? 'loading' : ''}`}
+            onClick={analyzeCode}
             disabled={loading !== ''}
-          />
-          <Button
-            text={loading === 'security' ? 'Scanning...' : 'Security Scan'}
-            color="danger"
-            outline={true}
-            small={true}
-            handler={scanSecurity}
+          >
+            <i className="bi bi-graph-up"></i>
+            <span>{loading === 'analysis' ? 'Analyzing...' : 'Analyze'}</span>
+            {loading === 'analysis' && <div className="spinner"></div>}
+          </button>
+          
+          <button
+            className={`action-btn security ${loading === 'security' ? 'loading' : ''}`}
+            onClick={scanSecurity}
             disabled={loading !== ''}
-          />
-          <Button
-            text={loading === 'optimized' ? 'Optimizing...' : 'Optimize'}
-            color="success"
-            outline={true}
-            small={true}
-            handler={() => generateOptimizedCode()}
+          >
+            <i className="bi bi-shield-check"></i>
+            <span>{loading === 'security' ? 'Scanning...' : 'Security'}</span>
+            {loading === 'security' && <div className="spinner"></div>}
+          </button>
+          
+          <button
+            className={`action-btn optimize ${loading === 'optimized' ? 'loading' : ''}`}
+            onClick={() => generateOptimizedCode()}
             disabled={loading !== ''}
-          />
+          >
+            <i className="bi bi-lightning"></i>
+            <span>{loading === 'optimized' ? 'Optimizing...' : 'Optimize'}</span>
+            {loading === 'optimized' && <div className="spinner"></div>}
+          </button>
         </div>
       </div>
 
       {error && (
-        <div className="alert alert-warning alert-sm mb-3">
-          <small>{error}</small>
+        <div className="error-message">
+          <i className="bi bi-exclamation-triangle"></i>
+          <span>{error}</span>
         </div>
       )}
 
-      {/* Navigation Tabs */}
+      {/* Modern Navigation Tabs */}
       {(optimization || securityAnalysis || optimizedCode) && (
-        <ul className="nav nav-tabs mb-3">
-          <li className="nav-item">
+        <div className="optimizer-tabs">
+          <div className="tab-list">
             <button
-              className={`nav-link ${activeTab === 'analysis' ? 'active' : ''}`}
+              className={`tab-item ${activeTab === 'analysis' ? 'active' : ''} ${!optimization ? 'disabled' : ''}`}
               onClick={() => setActiveTab('analysis')}
               disabled={!optimization}
             >
-              Analysis {optimization && (
-                <span className={`badge bg-secondary ms-1`}>
+              <i className="bi bi-graph-up-arrow"></i>
+              <span>Analysis</span>
+              {optimization && (
+                <div className="tab-badge">
                   {optimization.issues.length}
-                </span>
+                </div>
               )}
             </button>
-          </li>
-          <li className="nav-item">
+            
             <button
-              className={`nav-link ${activeTab === 'security' ? 'active' : ''}`}
+              className={`tab-item ${activeTab === 'security' ? 'active' : ''} ${!securityAnalysis ? 'disabled' : ''}`}
               onClick={() => setActiveTab('security')}
               disabled={!securityAnalysis}
             >
-              Security {securityAnalysis && (
-                <span className={`badge bg-${securityAnalysis.riskLevel === 'high' ? 'danger' : securityAnalysis.riskLevel === 'medium' ? 'warning' : 'success'} ms-1`}>
+              <i className="bi bi-shield-lock"></i>
+              <span>Security</span>
+              {securityAnalysis && (
+                <div className={`tab-badge ${securityAnalysis.riskLevel === 'high' ? 'danger' : securityAnalysis.riskLevel === 'medium' ? 'warning' : 'success'}`}>
                   {securityAnalysis.issueCount}
-                </span>
+                </div>
               )}
             </button>
-          </li>
-          <li className="nav-item">
+            
             <button
-              className={`nav-link ${activeTab === 'optimized' ? 'active' : ''}`}
+              className={`tab-item ${activeTab === 'optimized' ? 'active' : ''} ${!optimizedCode ? 'disabled' : ''}`}
               onClick={() => setActiveTab('optimized')}
               disabled={!optimizedCode}
             >
-              Optimized Code
+              <i className="bi bi-code-slash"></i>
+              <span>Optimized</span>
             </button>
-          </li>
-        </ul>
+          </div>
+        </div>
       )}
 
       {/* Analysis Tab */}
       {activeTab === 'analysis' && optimization && (
-        <div className="optimization-analysis">
-          <div className="row mb-3">
-            <div className="col-md-3">
-              <div className="text-center">
-                <div className={`h4 mb-1 ${getScoreColor(optimization.overallScore)}`}>
-                  {optimization.overallScore}/100
+        <div className="tab-content analysis-content">
+          <div className="metrics-grid">
+            <div className="metric-card score">
+              <div className="metric-icon">
+                <i className="bi bi-speedometer2"></i>
+              </div>
+              <div className="metric-content">
+                <div className={`metric-value ${getScoreColor(optimization.overallScore)}`}>
+                  {optimization.overallScore}<span className="metric-unit">/100</span>
                 </div>
-                <small className="text-muted">Overall Score</small>
+                <div className="metric-label">Overall Score</div>
               </div>
             </div>
-            <div className="col-md-3">
-              <div className="text-center">
-                <div className="h6 mb-1 text-capitalize">
+            
+            <div className="metric-card complexity">
+              <div className="metric-icon">
+                <i className="bi bi-diagram-3"></i>
+              </div>
+              <div className="metric-content">
+                <div className="metric-value text-capitalize">
                   {optimization.complexity}
                 </div>
-                <small className="text-muted">Complexity</small>
+                <div className="metric-label">Complexity</div>
               </div>
             </div>
-            <div className="col-md-3">
-              <div className="text-center">
-                <div className={`h6 mb-1 text-capitalize ${getMaintainabilityColor(optimization.maintainability)}`}>
+            
+            <div className="metric-card maintainability">
+              <div className="metric-icon">
+                <i className="bi bi-gear"></i>
+              </div>
+              <div className="metric-content">
+                <div className={`metric-value text-capitalize ${getMaintainabilityColor(optimization.maintainability)}`}>
                   {optimization.maintainability}
                 </div>
-                <small className="text-muted">Maintainability</small>
+                <div className="metric-label">Maintainability</div>
               </div>
             </div>
-            <div className="col-md-3">
-              <div className="text-center">
-                <div className="h6 mb-1">
+            
+            <div className="metric-card issues">
+              <div className="metric-icon">
+                <i className="bi bi-bug"></i>
+              </div>
+              <div className="metric-content">
+                <div className="metric-value">
                   {optimization.issues.length}
                 </div>
-                <small className="text-muted">Issues Found</small>
+                <div className="metric-label">Issues Found</div>
               </div>
             </div>
           </div>
 
-          <div className="mb-3">
-            <h6>Summary</h6>
-            <p className="text-muted mb-0">{optimization.summary}</p>
+          <div className="summary-section">
+            <div className="section-header">
+              <i className="bi bi-file-text"></i>
+              <h6>Summary</h6>
+            </div>
+            <div className="summary-content">
+              {optimization.summary}
+            </div>
           </div>
 
           {optimization.issues.length > 0 && (
-            <div>
-              <h6>Issues & Suggestions</h6>
-              {optimization.issues.map((issue, index) => (
-                <div key={index} className="card mb-2">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between align-items-start mb-2">
-                      <h6 className="card-title mb-0">{issue.title}</h6>
-                      <div>
-                        <span className={getTypeBadge(issue.type)}>{issue.type}</span>
-                        <span className={`${getSeverityBadge(issue.severity)} ms-1`}>{issue.severity}</span>
+            <div className="issues-section">
+              <div className="section-header">
+                <i className="bi bi-list-check"></i>
+                <h6>Issues & Suggestions</h6>
+                <div className="issue-count">{optimization.issues.length} issues</div>
+              </div>
+              
+              <div className="issues-list">
+                {optimization.issues.map((issue, index) => (
+                  <div key={index} className="issue-card">
+                    <div className="issue-header">
+                      <div className="issue-title">
+                        <i className={`bi ${issue.type === 'performance' ? 'bi-speedometer' : issue.type === 'security' ? 'bi-shield-exclamation' : issue.type === 'readability' ? 'bi-eye' : issue.type === 'best-practice' ? 'bi-star' : 'bi-bug'}`}></i>
+                        <span>{issue.title}</span>
+                      </div>
+                      <div className="issue-badges">
+                        <span className={`type-badge ${issue.type}`}>{issue.type}</span>
+                        <span className={`severity-badge ${issue.severity}`}>{issue.severity}</span>
                       </div>
                     </div>
-                    <p className="card-text text-muted mb-2">{issue.description}</p>
-                    <div className="mb-2">
-                      <strong>Suggestion:</strong> {issue.suggestion}
+                    
+                    <div className="issue-description">
+                      {issue.description}
                     </div>
+                    
+                    <div className="issue-suggestion">
+                      <div className="suggestion-label">
+                        <i className="bi bi-lightbulb"></i>
+                        <span>Suggestion</span>
+                      </div>
+                      <div className="suggestion-text">{issue.suggestion}</div>
+                    </div>
+                    
                     {issue.originalCode && (
-                      <div className="mb-2">
-                        <small className="text-muted">Problematic code:</small>
-                        <pre className="bg-light p-2 rounded"><code>{issue.originalCode}</code></pre>
+                      <div className="code-section">
+                        <div className="code-label problematic">
+                          <i className="bi bi-x-circle"></i>
+                          <span>Problematic code</span>
+                        </div>
+                        <div className="code-block original">
+                          <pre><code>{issue.originalCode}</code></pre>
+                        </div>
                       </div>
                     )}
+                    
                     {issue.optimizedCode && (
-                      <div>
-                        <small className="text-success">Improved code:</small>
-                        <pre className="bg-light p-2 rounded border-start border-success border-3"><code>{issue.optimizedCode}</code></pre>
+                      <div className="code-section">
+                        <div className="code-label improved">
+                          <i className="bi bi-check-circle"></i>
+                          <span>Improved code</span>
+                        </div>
+                        <div className="code-block optimized">
+                          <pre><code>{issue.optimizedCode}</code></pre>
+                        </div>
                       </div>
                     )}
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -314,70 +381,99 @@ const CodeOptimizer: React.FC<CodeOptimizerProps> = ({ code, language }) => {
 
       {/* Security Tab */}
       {activeTab === 'security' && securityAnalysis && (
-        <div className="security-analysis">
-          <div className="row mb-3">
-            <div className="col-md-4">
-              <div className="text-center">
-                <div className={`h4 mb-1 ${securityAnalysis.riskLevel === 'high' ? 'text-danger' : securityAnalysis.riskLevel === 'medium' ? 'text-warning' : 'text-success'}`}>
-                  {securityAnalysis.riskLevel.toUpperCase()}
-                </div>
-                <small className="text-muted">Risk Level</small>
+        <div className="tab-content security-content">
+          <div className="security-overview">
+            <div className="security-metric-card">
+              <div className="security-icon">
+                <i className={`bi ${securityAnalysis.riskLevel === 'high' ? 'bi-shield-x' : securityAnalysis.riskLevel === 'medium' ? 'bi-shield-exclamation' : 'bi-shield-check'}`}></i>
               </div>
-            </div>
-            <div className="col-md-4">
-              <div className="text-center">
-                <div className="h4 mb-1">
-                  {securityAnalysis.issueCount}
+              <div className="security-info">
+                <div className={`risk-level ${securityAnalysis.riskLevel}`}>
+                  {securityAnalysis.riskLevel.toUpperCase()} RISK
                 </div>
-                <small className="text-muted">Security Issues</small>
+                <div className="security-stats">
+                  <span className="issue-count">{securityAnalysis.issueCount}</span>
+                  <span className="issue-label">security {securityAnalysis.issueCount === 1 ? 'issue' : 'issues'} found</span>
+                </div>
               </div>
-            </div>
-            <div className="col-md-4">
-              <div className="text-center">
-                <div className={`h4 mb-1 ${securityAnalysis.issueCount === 0 ? 'text-success' : 'text-warning'}`}>
-                  {securityAnalysis.issueCount === 0 ? '✓' : '⚠'}
+              <div className="security-status">
+                <div className={`status-indicator ${securityAnalysis.issueCount === 0 ? 'safe' : 'warning'}`}>
+                  <i className={`bi ${securityAnalysis.issueCount === 0 ? 'bi-check-circle' : 'bi-exclamation-triangle'}`}></i>
                 </div>
-                <small className="text-muted">Security Status</small>
               </div>
             </div>
           </div>
 
           {securityAnalysis.securityIssues.length > 0 ? (
-            <div>
-              <h6>Security Vulnerabilities</h6>
-              {securityAnalysis.securityIssues.map((issue, index) => (
-                <div key={index} className="card mb-2 border-danger">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between align-items-start mb-2">
-                      <h6 className="card-title mb-0 text-danger">
-                        🔒 {issue.title}
-                      </h6>
-                      <span className={getSeverityBadge(issue.severity)}>{issue.severity}</span>
+            <div className="security-issues-section">
+              <div className="section-header">
+                <i className="bi bi-shield-exclamation"></i>
+                <h6>Security Vulnerabilities</h6>
+                <div className="vulnerability-count">{securityAnalysis.securityIssues.length} vulnerabilities</div>
+              </div>
+              
+              <div className="security-issues-list">
+                {securityAnalysis.securityIssues.map((issue, index) => (
+                  <div key={index} className="security-issue-card">
+                    <div className="security-issue-header">
+                      <div className="security-issue-title">
+                        <i className="bi bi-shield-exclamation"></i>
+                        <span>{issue.title}</span>
+                      </div>
+                      <div className={`security-severity-badge ${issue.severity}`}>
+                        <i className={`bi ${issue.severity === 'critical' ? 'bi-exclamation-triangle-fill' : issue.severity === 'high' ? 'bi-exclamation-triangle' : issue.severity === 'medium' ? 'bi-exclamation-circle' : 'bi-info-circle'}`}></i>
+                        <span>{issue.severity}</span>
+                      </div>
                     </div>
-                    <p className="card-text text-muted mb-2">{issue.description}</p>
-                    <div className="mb-2">
-                      <strong className="text-danger">Security Fix:</strong> {issue.suggestion}
+                    
+                    <div className="security-issue-description">
+                      {issue.description}
                     </div>
+                    
+                    <div className="security-fix-section">
+                      <div className="fix-label">
+                        <i className="bi bi-shield-check"></i>
+                        <span>Security Fix</span>
+                      </div>
+                      <div className="fix-text">{issue.suggestion}</div>
+                    </div>
+                    
                     {issue.originalCode && (
-                      <div className="mb-2">
-                        <small className="text-danger">Vulnerable code:</small>
-                        <pre className="bg-light p-2 rounded border-start border-danger border-3"><code>{issue.originalCode}</code></pre>
+                      <div className="code-section">
+                        <div className="code-label vulnerable">
+                          <i className="bi bi-shield-x"></i>
+                          <span>Vulnerable code</span>
+                        </div>
+                        <div className="code-block vulnerable">
+                          <pre><code>{issue.originalCode}</code></pre>
+                        </div>
                       </div>
                     )}
+                    
                     {issue.optimizedCode && (
-                      <div>
-                        <small className="text-success">Secure code:</small>
-                        <pre className="bg-light p-2 rounded border-start border-success border-3"><code>{issue.optimizedCode}</code></pre>
+                      <div className="code-section">
+                        <div className="code-label secure">
+                          <i className="bi bi-shield-check"></i>
+                          <span>Secure code</span>
+                        </div>
+                        <div className="code-block secure">
+                          <pre><code>{issue.optimizedCode}</code></pre>
+                        </div>
                       </div>
                     )}
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           ) : (
-            <div className="alert alert-success">
-              <h6 className="alert-heading">🛡️ No Security Issues Found</h6>
-              <p className="mb-0">The code appears to follow security best practices. However, always consider additional security measures in production environments.</p>
+            <div className="security-safe-state">
+              <div className="safe-icon">
+                <i className="bi bi-shield-check"></i>
+              </div>
+              <div className="safe-content">
+                <h6>No Security Issues Found</h6>
+                <p>The code appears to follow security best practices. However, always consider additional security measures in production environments.</p>
+              </div>
             </div>
           )}
         </div>
@@ -385,65 +481,126 @@ const CodeOptimizer: React.FC<CodeOptimizerProps> = ({ code, language }) => {
 
       {/* Optimized Code Tab */}
       {activeTab === 'optimized' && optimizedCode && (
-        <div className="optimized-code">
-          <div className="mb-3">
-            <div className="d-flex justify-content-between align-items-center mb-2">
-              <h6>Optimized Code</h6>
-              <div className="btn-group" role="group">
-                <Button
-                  text="Performance"
-                  color="primary"
-                  outline={true}
-                  small={true}
-                  handler={() => generateOptimizedCode('performance')}
-                  disabled={loading !== ''}
-                />
-                <Button
-                  text="Readability"
-                  color="info"
-                  outline={true}
-                  small={true}
-                  handler={() => generateOptimizedCode('readability')}
-                  disabled={loading !== ''}
-                />
-                <Button
-                  text="Security"
-                  color="danger"
-                  outline={true}
-                  small={true}
-                  handler={() => generateOptimizedCode('security')}
-                  disabled={loading !== ''}
-                />
+        <div className="tab-content optimized-content">
+          <div className="optimization-controls">
+            <div className="controls-header">
+              <div className="header-info">
+                <i className="bi bi-lightning-charge"></i>
+                <span>Code Optimization</span>
+              </div>
+              <div className="focus-area">
+                <span className="focus-label">Focus:</span>
+                <span className="focus-value">{optimizedCode.focusArea}</span>
               </div>
             </div>
-            <small className="text-muted">Focus Area: {optimizedCode.focusArea}</small>
+            
+            <div className="focus-buttons">
+              <button
+                className={`focus-btn performance ${loading === 'optimized' ? 'loading' : ''}`}
+                onClick={() => generateOptimizedCode('performance')}
+                disabled={loading !== ''}
+              >
+                <i className="bi bi-speedometer2"></i>
+                <span>Performance</span>
+              </button>
+              
+              <button
+                className={`focus-btn readability ${loading === 'optimized' ? 'loading' : ''}`}
+                onClick={() => generateOptimizedCode('readability')}
+                disabled={loading !== ''}
+              >
+                <i className="bi bi-eye"></i>
+                <span>Readability</span>
+              </button>
+              
+              <button
+                className={`focus-btn security ${loading === 'optimized' ? 'loading' : ''}`}
+                onClick={() => generateOptimizedCode('security')}
+                disabled={loading !== ''}
+              >
+                <i className="bi bi-shield-check"></i>
+                <span>Security</span>
+              </button>
+            </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-6">
-              <h6 className="text-muted">Original Code</h6>
-              <pre className="bg-light p-3 rounded border" style={{ maxHeight: '400px', overflow: 'auto' }}>
-                <code>{optimizedCode.originalCode}</code>
-              </pre>
-            </div>
-            <div className="col-md-6">
-              <h6 className="text-success">Optimized Code</h6>
-              <pre className="bg-light p-3 rounded border border-success" style={{ maxHeight: '400px', overflow: 'auto' }}>
-                <code>{optimizedCode.optimizedCode}</code>
-              </pre>
+          <div className="code-comparison">
+            <div className="comparison-grid">
+              <div className="code-panel original">
+                <div className="panel-header">
+                  <div className="panel-title">
+                    <i className="bi bi-code"></i>
+                    <span>Original Code</span>
+                  </div>
+                  <div className="panel-status original-status">
+                    <i className="bi bi-circle"></i>
+                    <span>Before</span>
+                  </div>
+                </div>
+                <div className="code-container">
+                  <pre className="code-block"><code>{optimizedCode.originalCode}</code></pre>
+                </div>
+              </div>
+              
+              <div className="comparison-arrow">
+                <div className="arrow-icon">
+                  <i className="bi bi-arrow-right"></i>
+                </div>
+                <div className="arrow-text">Optimized</div>
+              </div>
+              
+              <div className="code-panel optimized">
+                <div className="panel-header">
+                  <div className="panel-title">
+                    <i className="bi bi-code-slash"></i>
+                    <span>Optimized Code</span>
+                  </div>
+                  <div className="panel-status optimized-status">
+                    <i className="bi bi-check-circle"></i>
+                    <span>After</span>
+                  </div>
+                </div>
+                <div className="code-container">
+                  <pre className="code-block"><code>{optimizedCode.optimizedCode}</code></pre>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {!optimization && !securityAnalysis && !optimizedCode && !loading && (
-        <div className="text-center text-muted py-4">
-          <p>Select an optimization option above to analyze your code</p>
-          <ul className="list-unstyled">
-            <li><strong>Analyze Code:</strong> Get comprehensive optimization suggestions</li>
-            <li><strong>Security Scan:</strong> Identify potential security vulnerabilities</li>
-            <li><strong>Optimize:</strong> Generate an improved version of your code</li>
-          </ul>
+        <div className="empty-state">
+          <div className="empty-icon">
+            <i className="bi bi-cpu"></i>
+          </div>
+          <div className="empty-content">
+            <h6>Ready to Optimize Your Code</h6>
+            <p>Select an optimization option above to get started with AI-powered code analysis</p>
+          </div>
+          <div className="feature-list">
+            <div className="feature-item">
+              <i className="bi bi-graph-up"></i>
+              <div className="feature-text">
+                <strong>Analyze Code</strong>
+                <span>Get comprehensive optimization suggestions and code quality metrics</span>
+              </div>
+            </div>
+            <div className="feature-item">
+              <i className="bi bi-shield-check"></i>
+              <div className="feature-text">
+                <strong>Security Scan</strong>
+                <span>Identify potential security vulnerabilities and get fixes</span>
+              </div>
+            </div>
+            <div className="feature-item">
+              <i className="bi bi-lightning"></i>
+              <div className="feature-text">
+                <strong>Optimize Code</strong>
+                <span>Generate an improved version focused on specific areas</span>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
