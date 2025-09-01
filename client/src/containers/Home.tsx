@@ -134,6 +134,74 @@ export const Home = (): JSX.Element => {
             </div>
           )}
 
+          {/* Popular Tags Section */}
+          {!hasSearched && (
+            <div className='col-12 mb-5'>
+              <div className='card border-0 shadow-sm'>
+                <div className='card-body p-4'>
+                  <h5 className='card-title text-primary mb-3'>
+                    <i className='bi bi-tags me-2'></i>
+                    Popular Tags
+                  </h5>
+                  <div className='d-flex flex-wrap gap-2'>
+                    {['javascript', 'react', 'typescript', 'python', 'css', 'html', 'node.js', 'api'].map((tag) => (
+                      <span 
+                        key={tag}
+                        className='badge bg-light text-dark border cursor-pointer hover-primary'
+                        onClick={() => {
+                          // This could trigger a search for this tag
+                          console.log(`Search for tag: ${tag}`);
+                        }}
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Quick Tips Section */}
+          {!hasSearched && (
+            <div className='col-12 mb-5'>
+              <div className='card border-0 shadow-sm bg-light'>
+                <div className='card-body p-4'>
+                  <h5 className='card-title text-info mb-3'>
+                    <i className='bi bi-lightbulb me-2'></i>
+                    Quick Tips
+                  </h5>
+                  <div className='row g-3'>
+                    <div className='col-md-4'>
+                      <div className='d-flex align-items-start'>
+                        <i className='bi bi-keyboard text-primary me-2 mt-1'></i>
+                        <small className='text-muted'>
+                          Use <kbd>Ctrl+K</kbd> to quickly open search
+                        </small>
+                      </div>
+                    </div>
+                    <div className='col-md-4'>
+                      <div className='d-flex align-items-start'>
+                        <i className='bi bi-pin text-warning me-2 mt-1'></i>
+                        <small className='text-muted'>
+                          Pin frequently used snippets for quick access
+                        </small>
+                      </div>
+                    </div>
+                    <div className='col-md-4'>
+                      <div className='d-flex align-items-start'>
+                        <i className='bi bi-collection text-success me-2 mt-1'></i>
+                        <small className='text-muted'>
+                          Organize snippets into collections by project
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Quick Actions */}
           <div className='col-12'>
             <div className='card border-0 quick-actions'>
@@ -154,6 +222,10 @@ export const Home = (): JSX.Element => {
                   <a href='/collections' className='btn btn-outline-secondary btn-lg'>
                     <i className='bi bi-folder2 me-2'></i>
                     Manage Collections
+                  </a>
+                  <a href='/about' className='btn btn-outline-info btn-lg'>
+                    <i className='bi bi-info-circle me-2'></i>
+                    Learn More
                   </a>
                 </div>
               </div>
