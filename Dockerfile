@@ -2,19 +2,20 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Copy package files and install server dependencies
 COPY package*.json ./
-
 RUN npm install
 
+# Copy source code
 COPY . .
 
-# Install client dependencies and build
+# Install client dependencies and build everything
 RUN mkdir -p ./public ./data \
     && cd client \
-    && npm install
-
-# Build with legacy OpenSSL provider for Node 18+
-RUN npm run build:client:linux \
+    && npm install \
+    && npm run build:legacy \
+    && cd .. \
+    && cp -r client/build/* public/ \
     && npm run build:tsc
 
 # Clean up src files
