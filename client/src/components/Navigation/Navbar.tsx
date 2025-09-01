@@ -45,7 +45,6 @@ export const Navbar = (): JSX.Element => {
                   {name === 'Snippets' && <i className='bi bi-collection me-2'></i>}
                   {name === 'Collections' && <i className='bi bi-folder2 me-2'></i>}
                   {name === 'Editor' && <i className='bi bi-plus-circle me-2'></i>}
-                  {name === 'Smart Create' && <i className='bi bi-magic me-2'></i>}
                   {name === 'About' && <i className='bi bi-info-circle me-2'></i>}
                   {name}
                 </NavLink>
