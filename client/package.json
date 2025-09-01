@@ -28,6 +28,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:legacy": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -51,6 +52,7 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
+    "cross-env": "^10.0.0",
     "purgecss": "^4.0.3"
   }
 }

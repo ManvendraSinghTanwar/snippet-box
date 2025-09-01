@@ -2,9 +2,9 @@
   "name": "snippet-hub",
   "version": "1.0.0",
   "scripts": {
-    "build": "npm run build:client && npm run build:tsc",
+    "build": "npm run build:client:linux && npm run build:tsc",
     "start": "node build/server.js",
-    "railway:build": "npm install && NODE_OPTIONS=--openssl-legacy-provider npm run build:client && npm run build:tsc",
+    "railway:build": "npm install && npm run build:client:linux && npm run build:tsc",
     "railway:start": "node build/server.js"
   },
   "engines": {

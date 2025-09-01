@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
@@ -8,15 +8,14 @@ RUN npm install
 
 COPY . .
 
-# Install client dependencies
+# Install client dependencies and build
 RUN mkdir -p ./public ./data \
     && cd client \
-    && npm install \
-    && npm rebuild node-sass
+    && npm install
 
-# Build 
-RUN npm run build \
-    && mv ./client/build/* ./public
+# Build with legacy OpenSSL provider for Node 18+
+RUN npm run build:client:linux \
+    && npm run build:tsc
 
 # Clean up src files
 RUN rm -rf src/ ./client \
