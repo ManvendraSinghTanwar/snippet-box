@@ -19,6 +19,10 @@
     {
       "name": "Smart Create",
       "dest": "/smart-create"
+    },
+    {
+      "name": "About",
+      "dest": "/about"
     }
   ]
 }
