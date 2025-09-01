@@ -16,7 +16,7 @@
     "build:client:windows": "cd client && npm install && cross-env NODE_OPTIONS=--openssl-legacy-provider npm run build && cd .. && xcopy /E /I /Y client\\build\\* public\\",
     "build:clear": "if exist build rmdir /s /q build",
     "build:tsc": "tsc",
-    "build": "npm run build:client && npm run build:tsc",
+    "build": "npm run build:client:linux && npm run build:tsc",
     "postinstall": "npm run build"
   },
   "keywords": [],
