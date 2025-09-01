@@ -41,17 +41,21 @@ export const SearchBar = (): JSX.Element => {
   };
 
   return (
-    <div className='mb-3'>
-      <div className='input-group'>
+    <div className='mb-0'>
+      <div className='input-group input-group-lg mb-3'>
+        <span className='input-group-text bg-light border-end-0'>
+          <i className='bi bi-search text-muted'></i>
+        </span>
         <input
           type='text'
-          className='form-control'
+          className='form-control border-start-0 shadow-sm'
           placeholder='Search by title, description, or code... Use lang:javascript tags:react for filters'
           ref={inputRef}
           onKeyUp={e => inputHandler(e)}
+          style={{ fontSize: '1rem' }}
         />
         <button 
-          className='btn btn-primary' 
+          className='btn btn-primary px-4' 
           type='button' 
           onClick={handleSearchClick}
           disabled={isSearching}
@@ -59,12 +63,12 @@ export const SearchBar = (): JSX.Element => {
           {isSearching ? (
             <span className='spinner-border spinner-border-sm me-2' role='status' aria-hidden='true'></span>
           ) : (
-            <i className='bi bi-search me-1'></i>
+            <i className='bi bi-search me-2'></i>
           )}
           Search
         </button>
         <button 
-          className='btn btn-outline-secondary' 
+          className='btn btn-outline-secondary px-3' 
           type='button' 
           onClick={handleClearClick}
           disabled={isSearching}
@@ -73,9 +77,12 @@ export const SearchBar = (): JSX.Element => {
           Clear
         </button>
       </div>
-      <div className='form-text text-muted ms-1 mt-2'>
-        <strong>Search tips:</strong> Use <code>lang:javascript</code> to filter by language, 
-        <code>tags:react,hooks</code> to filter by tags. Press <kbd>Enter</kbd> to search or <kbd>Esc</kbd> to clear.
+      <div className='text-center'>
+        <small className='text-muted'>
+          <i className='bi bi-info-circle me-1'></i>
+          <strong>Pro tips:</strong> Use <code className='bg-light px-1 rounded'>lang:javascript</code> for language filters, 
+          <code className='bg-light px-1 rounded'>tags:react,hooks</code> for tag filters. Press <kbd className='bg-dark text-light'>Enter</kbd> to search or <kbd className='bg-dark text-light'>Esc</kbd> to clear.
+        </small>
       </div>
     </div>
   );

@@ -2,8 +2,91 @@
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 @import './bootswatch';
 
+// Global body styling
+body {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
 .cursor-pointer:hover {
   cursor: pointer;
+}
+
+// Home page hero section styles
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 1rem;
+  padding: 3rem 2rem;
+  margin-bottom: 2rem;
+  
+  .display-4 {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+}
+
+// Enhanced card styling
+.card {
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+}
+
+// Stats cards styling
+.stats-card {
+  .card-body {
+    padding: 2rem 1.5rem;
+  }
+  
+  .display-6 {
+    font-size: 2.5rem;
+  }
+}
+
+// Search card enhancement
+.search-card {
+  background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+// Section headers
+.section-header {
+  border-bottom: 3px solid;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: currentColor;
+    opacity: 0.3;
+  }
+}
+
+// Quick actions section
+.quick-actions {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 1rem;
+  
+  .btn {
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+  }
 }
 
 // General modern improvements
@@ -29,6 +112,12 @@
   background-position: right 0.75rem center;
   background-size: 1rem;
   padding-right: 2.5rem;
+}
+
+// Enhanced input group styling
+.input-group-lg .input-group-text {
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
 }
 
 // Modern badge styling
