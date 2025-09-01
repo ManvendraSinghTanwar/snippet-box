@@ -31,49 +31,24 @@ export const Home = (): JSX.Element => {
         <Fragment>
           {/* Hero Section */}
           <div className='col-12 mb-5'>
-            <div className='hero-section-modern mb-4'>
-              <div className='hero-content text-center'>
-                <div className='hero-icon mb-4'>
-                  <i className='bi bi-code-slash'></i>
-                </div>
-                <h1 className='hero-title display-3 fw-bold mb-3'>
-                  Snippet Box
-                </h1>
-                <p className='hero-subtitle lead mb-4'>
-                  Your personal code snippet manager with AI-powered search and smart organization
-                </p>
-                <div className='hero-badges mb-4'>
-                  <span className='badge hero-badge me-2'>
-                    <i className='bi bi-lightning-charge me-1'></i>
-                    Fast Search
-                  </span>
-                  <span className='badge hero-badge me-2'>
-                    <i className='bi bi-robot me-1'></i>
-                    AI Powered
-                  </span>
-                  <span className='badge hero-badge'>
-                    <i className='bi bi-palette me-1'></i>
-                    Beautiful UI
-                  </span>
-                </div>
-              </div>
+            <div className='text-center mb-4 p-5'>
+              <h1 className='display-4 fw-bold mb-3' style={{
+                background: 'linear-gradient(135deg, #0d6efd, #0dcaf0)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>
+                Snippet Box
+              </h1>
+              <p className='lead text-muted mb-4'>
+                Manage your code snippets with ease
+              </p>
             </div>
             
             {/* Search Section */}
             <div className='row justify-content-center'>
-              <div className='col-12 col-lg-8'>
-                <div className='search-card-modern shadow-lg'>
-                  <div className='search-header mb-3'>
-                    <h5 className='search-title'>
-                      <i className='bi bi-search me-2'></i>
-                      Find your snippets instantly
-                    </h5>
-                    <p className='search-subtitle mb-0'>
-                      Search by title, description, language, or tags
-                    </p>
-                  </div>
-                  <SearchBar />
-                </div>
+              <div className='col-12 col-md-8 col-lg-6'>
+                <SearchBar />
               </div>
             </div>
           </div>
