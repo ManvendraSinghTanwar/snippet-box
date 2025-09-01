@@ -1,12 +1,13 @@
 import { NavLink } from 'react-router-dom';
 import { Route } from '../../typescript/interfaces';
 import { routes as clientRoutes } from './routes.json';
+import ThemeToggle from '../UI/ThemeToggle';
 
 export const Navbar = (): JSX.Element => {
   const routes = clientRoutes as Route[];
 
   return (
-    <nav className='navbar navbar-dark bg-dark navbar-expand'>
+    <nav className='navbar navbar-expand'>
       <div className='container-fluid'>
         <ul className='navbar-nav'>
           {routes.map(({ name, dest }, idx) => (
@@ -17,6 +18,9 @@ export const Navbar = (): JSX.Element => {
             </li>
           ))}
         </ul>
+        <div className='navbar-nav ms-auto'>
+          <ThemeToggle />
+        </div>
       </div>
     </nav>
   );

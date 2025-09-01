@@ -31,16 +31,7 @@ export const SearchBar = (): JSX.Element => {
         onKeyUp={e => inputHandler(e)}
       />
       <div className='form-text text-gray ms-1'>
-        Search by pressing `Enter`. Clear with `Esc`. Read more about available
-        filters{' '}
-        <a
-          href='https://github.com/pawelmalak/snippet-box/wiki/Search-filters'
-          target='_blank'
-          rel='noreferrer'
-          className='text-success text-decoration-none'
-        >
-          here
-        </a>
+        Search by pressing `Enter`. Clear with `Esc`.
       </div>
     </div>
   );

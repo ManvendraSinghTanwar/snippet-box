@@ -39,32 +39,48 @@ export const Snippets = (): JSX.Element => {
         <Fragment>
           <div className='col-12 col-md-4 col-lg-3'>
             <Card>
-              <h5 className='card-title'>All snippets</h5>
-              <div className='mb-3 d-flex justify-content-between'>
-                <span>Total</span>
-                <span>{snippets.length}</span>
+              <h5 className='card-title fw-bold text-primary'>All snippets</h5>
+              <div className='mb-3 d-flex justify-content-between align-items-center'>
+                <span className='fw-medium'>Total</span>
+                <span className='fw-medium'>{snippets.length}</span>
               </div>
               <hr />
 
-              <h5 className='card-title'>Filter by tags</h5>
-              <Fragment>
+              <h5 className='card-title fw-bold text-primary mb-3'>Filter by tags</h5>
+              <div className='tag-filter-list'>
                 {tagCount.map((tag, idx) => {
                   const isActiveFilter = filter === tag.name;
 
                   return (
                     <div
                       key={idx}
-                      className={`d-flex justify-content-between cursor-pointer ${
-                        isActiveFilter && 'text-success'
+                      className={`d-flex justify-content-between cursor-pointer p-2 rounded mb-2 transition-all ${
+                        isActiveFilter 
+                          ? 'bg-primary text-white' 
+                          : 'hover-bg-light'
                       }`}
                       onClick={() => filterHandler(tag.name)}
+                      style={{ 
+                        transition: 'all 0.3s ease',
+                        backgroundColor: isActiveFilter ? '#0d6efd' : 'transparent'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isActiveFilter) {
+                          e.currentTarget.style.backgroundColor = '#f8f9fa';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isActiveFilter) {
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }
+                      }}
                     >
-                      <span>{tag.name}</span>
-                      <span>{tag.count}</span>
+                      <span className='fw-medium'>{tag.name}</span>
+                      <span className='fw-medium'>{tag.count}</span>
                     </div>
                   );
                 })}
-              </Fragment>
+              </div>
               <div className='d-grid mt-3'>
                 <Button
                   text='Clear filters'

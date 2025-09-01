@@ -21,7 +21,7 @@ export const SnippetCard = (props: Props): JSX.Element => {
   };
 
   return (
-    <Card classes='h-100' bodyClasses='d-flex flex-column'>
+    <Card classes='h-100 snippet-card' bodyClasses='d-flex flex-column'>
       {/* TITLE */}
       <h5 className='card-title d-flex align-items-center justify-content-between'>
         {title}
