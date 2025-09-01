@@ -18,7 +18,7 @@ export const About = (): JSX.Element => {
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
             }}>
-              Snippet Box
+              Snippet Box 2.0
             </h1>
             <p className='lead mb-4 fs-4 text-muted'>
               Transform your coding experience with AI-powered snippet management
@@ -46,7 +46,7 @@ export const About = (): JSX.Element => {
                   <i className='bi bi-exclamation-triangle'></i>
                 </div>
                 <h2 className='section-title-about text-danger'>
-                  What Problem Does Snippet Box Solve?
+                  What Problem Does Snippet Box 2.0 Solve?
                 </h2>
                 <p className='section-subtitle-about'>
                   Every developer faces these daily challenges
@@ -112,7 +112,7 @@ export const About = (): JSX.Element => {
                   <i className='bi bi-lightbulb'></i>
                 </div>
                 <h2 className='section-title-about text-success'>
-                  How Snippet Box Solves These Problems
+                  How Snippet Box 2.0 Solves These Problems
                 </h2>
                 <p className='section-subtitle-about'>
                   Intelligent solutions for modern developers
@@ -177,7 +177,7 @@ export const About = (): JSX.Element => {
                         <i className='bi bi-arrow-down'></i>
                       </div>
                       <div className='comparison-item after'>
-                        <strong>Snippet Box way:</strong> Paste code → AI does everything
+                        <strong>Snippet Box 2.0 way:</strong> Paste code → AI does everything
                       </div>
                     </div>
                     <div className='ai-example-modern'>
@@ -217,7 +217,7 @@ export const About = (): JSX.Element => {
                   <i className='bi bi-star'></i>
                 </div>
                 <h2 className='section-title-about text-primary'>
-                  Why Choose Snippet Box?
+                  Why Choose Snippet Box 2.0?
                 </h2>
                 <p className='section-subtitle-about'>
                   Built by developers, for developers

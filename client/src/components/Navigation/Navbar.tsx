@@ -14,7 +14,7 @@ export const Navbar = (): JSX.Element => {
           <div className='brand-icon me-2 d-flex align-items-center justify-content-center'>
             <i className='bi bi-code-slash'></i>
           </div>
-          <span className='brand-text'>Snippet Box</span>
+          <span className='brand-text'>Snippet Box 2.0</span>
         </NavLink>
 
         {/* Mobile menu button */}

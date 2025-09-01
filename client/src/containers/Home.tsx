@@ -38,7 +38,7 @@ export const Home = (): JSX.Element => {
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text'
               }}>
-                Snippet Box
+                Snippet Box 2.0
               </h1>
               <p className='lead text-muted mb-3'>
                 Manage your code snippets with ease
@@ -271,7 +271,7 @@ export const Home = (): JSX.Element => {
                   </div>
                   <div className='action-content'>
                     <h6 className='action-title'>Learn More</h6>
-                    <p className='action-description'>About Snippet Box</p>
+                    <p className='action-description'>About Snippet Box 2.0</p>
                   </div>
                 </a>
               </div>
