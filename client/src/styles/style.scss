@@ -634,6 +634,7 @@ a {
   border: 1px solid var(--border-color) !important;
   box-shadow: var(--card-shadow) !important;
   border-radius: 8px;
+  z-index: 1050 !important;
   
   .dropdown-item {
     color: var(--text-primary) !important;
@@ -1442,7 +1443,7 @@ pre {
   border: 1px solid var(--border-light);
   border-radius: 20px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   display: flex;
@@ -1627,6 +1628,12 @@ pre {
     
     .snippet-actions-left {
       flex-shrink: 0;
+      position: relative;
+      z-index: 100;
+      
+      .dropdown {
+        position: static;
+      }
       
       button {
         background: none !important;
@@ -1693,6 +1700,13 @@ pre {
         }
       }
     }
+  }
+}
+
+// Snippet grid container - allow dropdown overflow
+.row.row-cols-1.row-cols-md-2.row-cols-lg-2.row-cols-xl-3 {
+  .col {
+    overflow: visible !important;
   }
 }
 
