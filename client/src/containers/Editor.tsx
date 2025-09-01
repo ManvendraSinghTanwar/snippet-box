@@ -36,33 +36,49 @@ export const Editor = (): JSX.Element => {
 
   return (
     <Layout>
-      {inEdit ? (
-        <Fragment>
-          <PageHeader<{ from: string }>
-            title='Edit snippet'
-            prevDest={from}
-            prevState={{ from: '/snippets' }}
-          />
-          <SnippetForm inEdit />
-        </Fragment>
-      ) : (
-        <Fragment>
-          <PageHeader title='Add new snippet'>
-            <div className="d-flex gap-2 mt-2">
-              <Button
-                text={useSmartMode ? '🤖 Smart Mode' : '📝 Manual Mode'}
-                color={useSmartMode ? 'primary' : 'secondary'}
-                outline={!useSmartMode}
-                handler={toggleMode}
-              />
-              <span className="badge bg-info align-self-center">
-                {useSmartMode ? 'AI-Powered' : 'Traditional'}
-              </span>
+      <div className="editor-modern">
+        {inEdit ? (
+          <Fragment>
+            <PageHeader<{ from: string }>
+              title='Edit snippet'
+              prevDest={from}
+              prevState={{ from: '/snippets' }}
+            />
+            <div className="snippet-form-modern">
+              <SnippetForm inEdit />
             </div>
-          </PageHeader>
-          {useSmartMode ? <SmartSnippetForm /> : <SnippetForm />}
-        </Fragment>
-      )}
+          </Fragment>
+        ) : (
+          <Fragment>
+            <PageHeader title='Add new snippet' />
+            
+            <div className="editor-header">
+              <div className="mode-toggle-section">
+                <div className="mode-toggle-wrapper">
+                  <p className="mode-description">
+                    Choose your preferred editing mode: <span className="mode-highlight">Smart Mode</span> uses AI to automatically generate snippet details from your code, while <span className="mode-highlight">Manual Mode</span> gives you full control over every field.
+                  </p>
+                  <div className="mode-controls">
+                    <button
+                      onClick={toggleMode}
+                      className={`btn ${useSmartMode ? 'btn-primary' : 'btn-outline-primary'}`}
+                    >
+                      {useSmartMode ? '🤖 Smart Mode' : '📝 Manual Mode'}
+                    </button>
+                    <span className={`badge mode-badge ${useSmartMode ? 'badge-ai' : 'badge-manual'}`}>
+                      {useSmartMode ? 'AI-Powered' : 'Traditional'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className={useSmartMode ? "smart-snippet-form-modern" : "snippet-form-modern"}>
+              {useSmartMode ? <SmartSnippetForm /> : <SnippetForm />}
+            </div>
+          </Fragment>
+        )}
+      </div>
     </Layout>
   );
 };

@@ -122,175 +122,444 @@ export const SmartSnippetForm: React.FC<SmartSnippetFormProps> = ({ inEdit = fal
   };
 
   return (
-    <div className='col-12 mt-3'>
-      <Card>
-        <div className="smart-snippet-form">
-          <h5 className='card-title mb-3'>
-            🤖 Smart Snippet Creator
-            <small className="text-muted d-block mt-1">
-              Just paste your code and let AI generate everything else!
-            </small>
-          </h5>
+    <div className='col-12 mt-3 smart-snippet-form-modern'>
+      <div className="smart-header">
+        <div className="smart-icon-wrapper">
+          <div className="smart-main-icon">
+            <i className="bi bi-robot"></i>
+            <div className="icon-glow"></div>
+          </div>
+        </div>
+        <h5 className='smart-title'>
+          AI-Powered Snippet Creator
+        </h5>
+        <p className="smart-subtitle">
+          Just paste your code and watch the magic happen! Our AI will analyze, categorize, and document your snippet automatically.
+        </p>
+        <div className="smart-features">
+          <div className="feature-pill">
+            <i className="bi bi-lightning-charge"></i>
+            Instant Analysis
+          </div>
+          <div className="feature-pill">
+            <i className="bi bi-tags"></i>
+            Auto-Tagging
+          </div>
+          <div className="feature-pill">
+            <i className="bi bi-file-text"></i>
+            Documentation
+          </div>
+        </div>
+      </div>
 
-          {error && (
-            <div className="alert alert-danger mb-3">
-              {error}
+      {error && (
+        <div className="alert-modern alert-danger-modern">
+          <div className="alert-icon">
+            <i className="bi bi-exclamation-triangle"></i>
+          </div>
+          <div className="alert-content">
+            <strong>Oops!</strong> {error}
+          </div>
+        </div>
+      )}
+
+      {/* Step 1: Code Input */}
+      <div className="step-section active">
+        <div className="step-header">
+          <div className="step-number">
+            <i className="bi bi-code-slash"></i>
+            <div className="step-number-text">1</div>
+          </div>
+          <div className="step-content">
+            <h6 className="step-title">Paste Your Code</h6>
+            <p className="step-description">Drop your code snippet here and let AI do the heavy lifting</p>
+          </div>
+        </div>
+        
+        <div className="code-input-section">
+          <div className="code-input-wrapper">
+            <div className="code-toolbar">
+              <div className="toolbar-left">
+                <i className="bi bi-code"></i>
+                <span>Code Editor</span>
+              </div>
+              <div className="toolbar-right">
+                <div className="code-stats">
+                  <span className="stat-item">
+                    <i className="bi bi-file-code"></i>
+                    {code.split('\n').length} lines
+                  </span>
+                  <span className="stat-item">
+                    <i className="bi bi-type"></i>
+                    {code.length} chars
+                  </span>
+                </div>
+              </div>
             </div>
-          )}
-
-          {/* Step 1: Code Input */}
-          <div className="step-1 mb-4">
-            <label htmlFor="code" className="form-label">
-              <strong>Step 1:</strong> Paste your code here
-            </label>
             <textarea
-              className="form-control"
+              className="form-control code-textarea-modern"
               id="code"
-              rows={10}
+              rows={12}
               value={code}
               placeholder="// Paste your code here...
+// Example: JavaScript function
 function fibonacci(n) {
   if (n <= 1) return n;
   return fibonacci(n - 1) + fibonacci(n - 2);
-}"
+}
+
+// Or any other programming language!
+// Python, Java, C++, SQL, etc."
               onChange={(e) => setCode(e.target.value)}
             />
-            <div className="d-flex gap-2 mt-2">
-              <Button
-                text={isGenerating ? 'Analyzing Code...' : '🧠 Generate Details with AI'}
-                color="primary"
-                handler={generateSnippetDetails}
-                disabled={isGenerating || !code.trim()}
-              />
-              {generatedData && (
-                <Button
-                  text="🔄 Reset"
-                  color="secondary"
-                  outline={true}
-                  handler={reset}
-                />
-              )}
+            <div className="code-input-footer">
+              <div className="supported-languages">
+                <i className="bi bi-check-circle"></i>
+                Supports: JavaScript, Python, Java, C++, SQL, Go, Rust, and 50+ more languages
+              </div>
             </div>
           </div>
-
-          {/* Step 2: Generated Details */}
-          {generatedData && (
-            <div className="step-2 mb-4">
-              <hr />
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <h6 className="mb-0">
-                  <strong>Step 2:</strong> Review & Edit Generated Details
-                </h6>
-                <Button
-                  text={isEditing ? '📖 View Mode' : '✏️ Edit Mode'}
-                  color="info"
-                  small={true}
-                  outline={true}
-                  handler={() => setIsEditing(!isEditing)}
-                />
+          <div className="action-buttons">
+            <button
+              onClick={generateSnippetDetails}
+              disabled={isGenerating || !code.trim()}
+              className="btn-generate-modern"
+            >
+              <div className="btn-icon">
+                {isGenerating ? (
+                  <i className="bi bi-arrow-clockwise spinning"></i>
+                ) : (
+                  <i className="bi bi-magic"></i>
+                )}
               </div>
+              <div className="btn-content">
+                <span className="btn-main-text">
+                  {isGenerating ? 'Analyzing Code...' : 'Generate Details with AI'}
+                </span>
+                <span className="btn-sub-text">
+                  {isGenerating ? 'Powered by OpenAI GPT' : 'Powered by advanced AI models'}
+                </span>
+              </div>
+              {!isGenerating && (
+                <div className="btn-arrow">
+                  <i className="bi bi-arrow-right"></i>
+                </div>
+              )}
+            </button>
+            {generatedData && (
+              <button
+                onClick={reset}
+                className="btn-reset-modern"
+              >
+                <i className="bi bi-arrow-counterclockwise"></i>
+                Start Over
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
 
-              {!isEditing ? (
-                // View Mode
-                <div className="generated-preview">
-                  <div className="row g-3">
-                    <div className="col-md-8">
-                      <div className="card border-success">
-                        <div className="card-body">
-                          <h6 className="card-title text-success">
-                            📝 {editableData.title}
-                          </h6>
-                          <p className="card-text">{editableData.description}</p>
-                          <div className="d-flex gap-2 flex-wrap">
-                            <span className="badge bg-primary">{editableData.language}</span>
+      {/* Step 2: Generated Details */}
+      {generatedData && (
+        <div className="step-section completed">
+          <div className="step-header">
+            <div className="step-number">
+              <i className="bi bi-check-circle"></i>
+              <div className="step-number-text">2</div>
+            </div>
+            <div className="step-content">
+              <h6 className="step-title">AI Generated Results</h6>
+              <p className="step-description">Review and customize the AI-generated details for your snippet</p>
+            </div>
+          </div>
+          
+          <div className="generated-preview-section">
+            <div className="preview-header">
+              <div className="preview-title-section">
+                <h6 className="preview-title">
+                  <i className="bi bi-sparkles"></i>
+                  AI Generated Content
+                </h6>
+                <div className="ai-confidence-badge">
+                  <i className="bi bi-award"></i>
+                  High Confidence
+                </div>
+              </div>
+              <div className="mode-toggle-section">
+                <button
+                  onClick={() => setIsEditing(!isEditing)}
+                  className="mode-toggle-btn-modern"
+                >
+                  <div className="toggle-icon">
+                    {isEditing ? (
+                      <i className="bi bi-eye"></i>
+                    ) : (
+                      <i className="bi bi-pencil"></i>
+                    )}
+                  </div>
+                  <span>
+                    {isEditing ? 'Preview Mode' : 'Edit Mode'}
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {!isEditing ? (
+              // Enhanced View Mode
+              <div className="preview-cards-modern">
+                <div className="preview-main-card">
+                  <div className="card-header-modern">
+                    <div className="card-icon">
+                      <i className="bi bi-file-code"></i>
+                    </div>
+                    <h6 className="card-title">{editableData.title}</h6>
+                    <div className="confidence-indicator high">
+                      <i className="bi bi-check-circle-fill"></i>
+                    </div>
+                  </div>
+                  <div className="card-body-modern">
+                    <p className="description">{editableData.description}</p>
+                    <div className="metadata-grid">
+                      <div className="metadata-item">
+                        <div className="metadata-label">
+                          <i className="bi bi-code-slash"></i>
+                          Language
+                        </div>
+                        <div className="metadata-value language-badge">
+                          {editableData.language}
+                        </div>
+                      </div>
+                      <div className="metadata-item">
+                        <div className="metadata-label">
+                          <i className="bi bi-tags"></i>
+                          Tags ({editableData.tags?.length || 0})
+                        </div>
+                        <div className="metadata-value">
+                          <div className="tag-cloud">
                             {editableData.tags?.map((tag, index) => (
-                              <span key={index} className="badge bg-secondary">{tag}</span>
-                            ))}
+                              <span key={index} className="tag-pill-modern">
+                                {tag}
+                              </span>
+                            )) || []}
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="col-md-4">
-                      <div className="card border-info">
-                        <div className="card-body">
-                          <h6 className="card-title text-info">🤖 AI Explanation</h6>
-                          <p className="card-text">
-                            <small>{editableData.docs}</small>
-                          </p>
+                  </div>
+                </div>
+                
+                <div className="preview-explanation-card">
+                  <div className="card-header-modern">
+                    <div className="card-icon explanation">
+                      <i className="bi bi-lightbulb"></i>
+                    </div>
+                    <h6 className="card-title">AI Explanation</h6>
+                    <div className="card-actions">
+                      <button className="btn-icon-small" title="Regenerate explanation">
+                        <i className="bi bi-arrow-clockwise"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="card-body-modern">
+                    <div className="explanation-content">
+                      {editableData.docs}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              // Enhanced Edit Mode
+              <div className="edit-mode-section-modern">
+                <div className="edit-header">
+                  <h6 className="edit-title">
+                    <i className="bi bi-pencil-square"></i>
+                    Customize Your Snippet
+                  </h6>
+                  <p className="edit-subtitle">Fine-tune the AI suggestions to match your preferences</p>
+                </div>
+                
+                <div className="edit-form-grid-modern">
+                  <div className="form-row">
+                    <div className="form-group-modern">
+                      <label className="form-label-modern">
+                        <div className="label-icon">
+                          <i className="bi bi-type"></i>
                         </div>
+                        <div className="label-content">
+                          <span className="label-text">Title</span>
+                          <span className="label-required">*</span>
+                        </div>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control-modern"
+                        value={editableData.title || ''}
+                        onChange={(e) => handleEditableChange('title', e.target.value)}
+                        placeholder="Enter a descriptive title..."
+                      />
+                    </div>
+                    <div className="form-group-modern">
+                      <label className="form-label-modern">
+                        <div className="label-icon">
+                          <i className="bi bi-code-slash"></i>
+                        </div>
+                        <div className="label-content">
+                          <span className="label-text">Language</span>
+                          <span className="label-required">*</span>
+                        </div>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control-modern"
+                        value={editableData.language || ''}
+                        onChange={(e) => handleEditableChange('language', e.target.value)}
+                        placeholder="e.g., JavaScript, Python, Java..."
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="form-group-modern full-width">
+                    <label className="form-label-modern">
+                      <div className="label-icon">
+                        <i className="bi bi-chat-text"></i>
+                      </div>
+                      <div className="label-content">
+                        <span className="label-text">Description</span>
+                      </div>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control-modern"
+                      value={editableData.description || ''}
+                      onChange={(e) => handleEditableChange('description', e.target.value)}
+                      placeholder="Brief description of what this code does..."
+                    />
+                  </div>
+                  
+                  <div className="form-group-modern full-width">
+                    <label className="form-label-modern">
+                      <div className="label-icon">
+                        <i className="bi bi-tags"></i>
+                      </div>
+                      <div className="label-content">
+                        <span className="label-text">Tags</span>
+                        <span className="label-hint">({editableData.tags?.length || 0} tags)</span>
+                      </div>
+                    </label>
+                    <div className="tags-input-modern">
+                      <input
+                        type="text"
+                        className="form-control-modern"
+                        value={editableData.tags?.join(', ') || ''}
+                        onChange={(e) => handleTagsChange(e.target.value)}
+                        placeholder="algorithm, recursion, fibonacci, mathematics..."
+                      />
+                      <div className="tags-preview-modern">
+                        {editableData.tags?.map((tag, index) => (
+                          <span key={index} className="tag-preview-pill">
+                            {tag}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newTags = editableData.tags?.filter((_, i) => i !== index) || [];
+                                handleEditableChange('tags', newTags);
+                              }}
+                              className="tag-remove-btn"
+                            >
+                              <i className="bi bi-x"></i>
+                            </button>
+                          </span>
+                        )) || []}
                       </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                // Edit Mode
-                <div className="edit-mode">
-                  <div className="row g-3">
-                    <div className="col-md-6">
-                      <label className="form-label">Title</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={editableData.title || ''}
-                        onChange={(e) => handleEditableChange('title', e.target.value)}
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <label className="form-label">Language</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={editableData.language || ''}
-                        onChange={(e) => handleEditableChange('language', e.target.value)}
-                      />
-                    </div>
-                    <div className="col-12">
-                      <label className="form-label">Description</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={editableData.description || ''}
-                        onChange={(e) => handleEditableChange('description', e.target.value)}
-                      />
-                    </div>
-                    <div className="col-12">
-                      <label className="form-label">Tags (comma-separated)</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={editableData.tags?.join(', ') || ''}
-                        onChange={(e) => handleTagsChange(e.target.value)}
-                      />
-                    </div>
-                    <div className="col-12">
-                      <label className="form-label">Documentation / Explanation</label>
-                      <textarea
-                        className="form-control"
-                        rows={4}
-                        value={editableData.docs || ''}
-                        onChange={(e) => handleEditableChange('docs', e.target.value)}
-                      />
+                  
+                  <div className="form-group-modern full-width">
+                    <label className="form-label-modern">
+                      <div className="label-icon">
+                        <i className="bi bi-file-text"></i>
+                      </div>
+                      <div className="label-content">
+                        <span className="label-text">Documentation & Explanation</span>
+                      </div>
+                    </label>
+                    <textarea
+                      className="form-control-modern textarea-modern"
+                      rows={6}
+                      value={editableData.docs || ''}
+                      onChange={(e) => handleEditableChange('docs', e.target.value)}
+                      placeholder="Detailed explanation of how the code works..."
+                    />
+                    <div className="form-hint">
+                      <i className="bi bi-info-circle"></i>
+                      You can use Markdown formatting for better documentation
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
-              {/* Step 3: Submit */}
-              <hr />
-              <div className="step-3">
-                <h6><strong>Step 3:</strong> Save Snippet</h6>
-                <div className="d-grid gap-2 d-md-flex">
-                  <Button
-                    text={inEdit ? '💾 Update Snippet' : '💾 Save Snippet'}
-                    color="success"
-                    handler={handleSubmit}
-                  />
+      {/* Step 3: Submit */}
+      {generatedData && (
+        <div className="step-section final">
+          <div className="step-header">
+            <div className="step-number">
+              <i className="bi bi-rocket"></i>
+              <div className="step-number-text">3</div>
+            </div>
+            <div className="step-content">
+              <h6 className="step-title">Save Your Snippet</h6>
+              <p className="step-description">Ready to add this beautifully organized snippet to your collection</p>
+            </div>
+          </div>
+          
+          <div className="final-submit-section-modern">
+            <div className="submit-preview">
+              <div className="preview-summary">
+                <div className="summary-item">
+                  <i className="bi bi-check-circle text-success"></i>
+                  <span>Title: <strong>{editableData.title}</strong></span>
+                </div>
+                <div className="summary-item">
+                  <i className="bi bi-check-circle text-success"></i>
+                  <span>Language: <strong>{editableData.language}</strong></span>
+                </div>
+                <div className="summary-item">
+                  <i className="bi bi-check-circle text-success"></i>
+                  <span>Tags: <strong>{editableData.tags?.length || 0} tags</strong></span>
+                </div>
+                <div className="summary-item">
+                  <i className="bi bi-check-circle text-success"></i>
+                  <span>Documentation: <strong>AI Generated</strong></span>
                 </div>
               </div>
             </div>
-          )}
+            
+            <button
+              onClick={handleSubmit}
+              className="btn-save-modern"
+            >
+              <div className="btn-icon">
+                <i className="bi bi-save"></i>
+              </div>
+              <div className="btn-content">
+                <span className="btn-main-text">
+                  {inEdit ? 'Update Snippet' : 'Save Snippet'}
+                </span>
+                <span className="btn-sub-text">
+                  Add to your collection
+                </span>
+              </div>
+              <div className="btn-arrow">
+                <i className="bi bi-arrow-right"></i>
+              </div>
+            </button>
+          </div>
         </div>
-      </Card>
+      )}
     </div>
   );
 };
